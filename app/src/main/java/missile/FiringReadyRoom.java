@@ -65,6 +65,8 @@ import tab.list.FileTab;
 import tab.list.FileTab_km;
 import tab.list.FileUtils;
 
+import static tab.list.AttachParameter.BLACK;
+import static tab.list.AttachParameter.WHITE;
 import static tab.list.AttachParameter.bw_file;
 import static tab.list.AttachParameter.cipher_magnified_file;
 import static tab.list.AttachParameter.image_decrypt_file;
@@ -127,8 +129,6 @@ class missileInfo{
 
 public class FiringReadyRoom extends Fragment {
 
-    static final int BLACK = -16777216;  // Constant to represent the RGB binary value of black. In binary - 1111111 00000000 00000000 00000000
-    static final int WHITE = -1;  // Constant to represent the RGB binary value of white. In binary - 1111111 1111111 1111111 1111111
     Bitmap magnified_key_image_2,keyImage,chiperImage,fileBitmap,black_white,magnified_key_image, finalimage;
     String receiver,  attachment = null,  state;
     String title = "Command", content = "Missile Fire";

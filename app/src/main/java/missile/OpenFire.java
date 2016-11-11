@@ -132,9 +132,8 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
     public String viewmod = "";
     public boolean finishretrieve;
     public String[] Again_id;
-    public String tittle,message,bmsg,upmsg,state,postFile,postFile_2;
+    public String tittle,message,bmsg,upmsg,state,postFile;
     public String Again_token,Again_sender;
-    //    public String sdcardPath_2 = Environment.getExternalStorageDirectory().toString() + File.separator + "Download" + "/";
     private String gettoken = new String();
     private String thumbnails = "mnt/sdcard/DCIM/.thumbnails/";
     private int listid, urgent = 0, split_seq = 0;
@@ -165,13 +164,9 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
     String receiver;
     String title = "Command", content = "Missile Fire";
     public int id = 0, file_amount, duration, file_size;
-    boolean checkFileType = false ;
     String filetype[];
     Submit submit ;
     String selfId, token, file_name;
-    static final int BLACK = -16777216;  // Constant to represent the RGB binary value of black. In binary - 1111111 00000000 00000000 00000000
-    static final int WHITE = -1;  // Constant to represent the RGB binary value of white. In binary - 1111111 1111111 1111111 1111111
-    Bitmap magnified_key_image_2,keyImage,chiperImage,fileBitmap,black_white,magnified_key_image;
     String[] form = { UserSchema._FILEPATH, UserSchema._DURATION, UserSchema._FILESIZE, UserSchema._FILENAME, UserSchema._ID };
     ArrayList<String> file_path;
     int index;
@@ -821,6 +816,12 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                         }
                         up_filepath.close();
 
+                        values = new ContentValues();
+                        values.put(UserSchema._FILEPATH, getFilename);
+                        values.put(UserSchema._FILENAME, retrieve.filename);
+                        values.put(UserSchema._ID, where);
+                        getContentResolver().insert(Uri.parse("content://tab.list.d2d/file_choice"), values);
+
 
                         updateNotification("0","wlan");
                         onResume();
@@ -1302,8 +1303,16 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                 new del_msg().execute();
                 break;
             case ITEM3:
-                Cursor fileAttach = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), form, null, null, null);
+                Cursor fileAttach = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"),
+                        new String[] {UserSchema._FILEPATH, UserSchema._FILENAME, UserSchema._ID}, null, null, null);
                 if (fileAttach.getCount() > 0){
+                    fileAttach.moveToFirst();
+                    String filePath = fileAttach.getString(0);
+                    String fileName = fileAttach.getString(1);
+                    String fileId = fileAttach.getString(2);
+
+                    System.out.println("file detail = " + filePath + " " + fileName + " " + fileId + " ");
+
                     LayoutInflater factory = LayoutInflater.from(OpenFire.this);
                     final View v1 = factory.inflate(R.layout.check_password, null);
 
@@ -1336,6 +1345,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                 }else {
                     Toast.makeText(OpenFire.this,"file is nothing",Toast.LENGTH_SHORT).show();
                 }
+                fileAttach.close();
                 break;
             case ITEM4:
                 new decrypt().execute();
@@ -1406,7 +1416,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                             }else{
                                 title="S00"+(id+1);
                                 content="進入戰備";
-                                fileUploadToSend("sned");
+                                fileUploadToSend("write");
                                 Toast.makeText(OpenFire.this,"OK",Toast.LENGTH_SHORT).show();
                             }
                         } catch (Exception e) {
@@ -1436,8 +1446,8 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
     public void fileUploadToSend(String arg) {
         // 檢查使用者有沒有選擇要上傳的檔案,選擇好的檔案會寫入file_choice的table內
         file_path = new ArrayList<String>();
-        Cursor up_file_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/file_choice"), form, null, null, null);
-//        Cursor up_file_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/file_choice"), new String[]{UserSchema._FILEPATH}, null, null, null);
+//        Cursor up_file_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/file_choice"), form, null, null, null);
+        Cursor up_file_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), form, null, null, null);
         if (up_file_cursor.getCount() > 0) {
             dialog = ProgressDialog.show(OpenFire.this, "請稍候", "資料處理中", true);
             dialog.show();

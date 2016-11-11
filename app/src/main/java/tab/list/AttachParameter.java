@@ -69,8 +69,8 @@ public class AttachParameter {
     public static UPnPPortMapper uPnPPortMapper = new UPnPPortMapper();
     public static openserver server;
     public static String sdcardPath = Environment.getExternalStorageDirectory().toString() + File.separator + "KM" + "/";
-    static final int BLACK = -16777216;  // Constant to represent the RGB binary value of black. In binary - 1111111 00000000 00000000 00000000
-    static final int WHITE = -1;  // Constant to represent the RGB binary value of white. In binary - 1111111 1111111 1111111 1111111
+    public static final int BLACK = -16777216;  // Constant to represent the RGB binary value of black. In binary - 1111111 00000000 00000000 00000000
+    public static final int WHITE = -1;  // Constant to represent the RGB binary value of white. In binary - 1111111 1111111 1111111 1111111
 
     public void setcount(int count) {
         this.count = count;
