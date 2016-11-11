@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/worldbackground2">
+
+    <ImageView
+        android:layout_width="250dp"
+        android:layout_height="190dp"
+        android:background="@drawable/logo_1_new"
+        android:layout_gravity="center"
+        android:id="@+id/icon"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
+
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true">
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            style="@style/fireready_bn"
+            android:id="@+id/btnReady"/>
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/btnFrie"
+            style="@style/fire_bn"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/btnIn"
+            style="@style/in_bn"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" />
+
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/btnLogin"
+            style="@style/login_bn"
+            android:layout_marginBottom="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/btnEdit"
+            style="@style/ed_bn"
+            android:layout_alignTop="@+id/btnLogin"
+            android:layout_alignStart="@+id/btnFrie" />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/btnReg"
+            style="@style/reg_bn"
+            android:layout_alignBottom="@+id/btnEdit"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="0dp" />
+
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true">
+
+            <TextView
+                android:id="@+id/usertitle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="12dip"
+                android:text="ID："
+                android:textColor="#ffffff"
+                android:textSize="18sp"
+                android:layout_weight="0.09" />
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dip"
+                android:textColor="#ffffff"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,184 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fab="http://schemas.android.com/tools"
+    android:background="@drawable/background_v1">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/status_bar_kitkat_height"
+        android:background="?colorPrimary"/>
+
+    <!--<android.support.v7.widget.Toolbar-->
+        <!--android:layout_marginTop="@dimen/status_bar_margin_top"-->
+        <!--android:id="@+id/toolbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="?actionBarSize"-->
+        <!--android:background="?attr/colorPrimary"-->
+        <!--android:elevation="4dp"-->
+        <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light"-->
+        <!--app:theme="@style/ToolbarTheme" />-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="535dp"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp"
+        android:layout_below="@+id/toolbar"
+        android:layout_gravity="center_horizontal|bottom">
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/previewimg"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp"
+            android:text="Receiver"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#333333" />
+
+        <EditText
+            android:id="@+id/receiver"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textView1"
+            android:layout_alignRight="@+id/delete"
+            android:layout_below="@+id/textView1"
+            android:ems="10"
+            android:hint="Receiver"
+            android:layout_marginRight="10dp"
+            android:singleLine="true"
+            android:textColor="#333333" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/receiver"
+            android:layout_below="@+id/receiver"
+            android:text="@string/Subject"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#333333" />
+
+        <EditText
+            android:id="@+id/subject"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textView2"
+            android:layout_alignRight="@+id/receiver"
+            android:layout_below="@+id/textView2"
+            android:ems="10"
+            android:hint="Subject"
+            android:singleLine="true"
+            android:textColor="#333333" >
+
+            <requestFocus />
+        </EditText>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/writename"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="TextView"
+                android:textColor="#333333"
+                android:textSize="12sp"
+                android:layout_alignTop="@+id/previewimg"
+                android:layout_toEndOf="@+id/previewimg"
+                android:layout_marginStart="23dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Choose Commands"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#333333"/>
+
+            <ImageView
+                android:id="@+id/previewimg"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:layout_above="@+id/textView3"
+                android:layout_alignParentStart="true" />
+
+            <Button
+                android:id="@+id/delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="delete"
+                android:textColor="#333333"
+                android:textSize="10sp"
+                android:layout_above="@+id/textView3"
+                android:layout_alignStart="@+id/Regsb" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SMS Select"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#333333"
+                android:layout_alignTop="@+id/Regsb"
+                android:layout_alignParentStart="true" />
+
+            <ToggleButton
+                android:id="@+id/Regsb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="75dp"
+                android:layout_marginRight="10dp"
+                android:textOff="SMS"
+                android:textOn="SMS"
+                android:layout_marginEnd="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true" />
+
+            <EditText
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:hint="Content"
+                android:textColor="#333333"
+                android:layout_below="@+id/Regsb"
+                android:layout_alignParentStart="true" />
+
+
+            <com.github.clans.fab.FloatingActionMenu
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fab"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true">
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_add_black_24dp"
+                    fab:fab_size="mini"
+                    fab:fab_label="Menu item 1"
+                    android:id="@+id/fab1"/>
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_add_circle_outline_black_24dp"
+                    fab:fab_size="mini"
+                    fab:fab_label="Menu item 2"
+                    android:id="@+id/fab2"/>
+
+            </com.github.clans.fab.FloatingActionMenu>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

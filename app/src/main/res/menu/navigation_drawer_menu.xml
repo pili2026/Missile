@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/Send"
+            android:icon="@drawable/fireready_nav"
+            android:title="飛彈準備室" />
+
+        <item
+            android:checked="true"
+            android:id="@+id/Inbox"
+            android:icon="@drawable/fire_nav"
+            android:title="飛彈發射室" />
+        <item
+            android:id="@+id/Notify"
+            android:icon="@drawable/noti_nav"
+            android:title="系統通知" />
+
+
+    </group>
+
+    <item android:title="Setting">
+        <menu>
+            <item
+                android:id="@+id/Edit"
+                android:icon="@drawable/set_nav"
+                android:title="設定" />
+            <item
+                android:id="@+id/Logout"
+                android:icon="@drawable/logout_nav"
+                android:title="登出" />
+        </menu>
+    </item>
+
+</menu>
