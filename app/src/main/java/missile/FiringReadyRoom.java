@@ -389,7 +389,7 @@ public class FiringReadyRoom extends Fragment {
             map.put("info", getInfo.get(i).getContent());
             map.put("date", getInfo.get(i).getDate());
             // 檢查檔案類型，放置相對應的檔案類型的圖片
-             if(getInfo.get(i).getFilepateh()!=null || !getInfo.get(i).getFilepateh().equals("")){
+             if(getInfo.get(i).getFilepateh()!=null || !(getInfo.get(i).getFilepateh().equals(""))){
                 boolean[] checktype = new boolean[AttachParameter.filetype];
                 checktype = AttachParameter.checktype(getInfo.get(i).getFilepateh());
                 Pattern patternmovie = Pattern.compile(".*.movie");
@@ -730,6 +730,7 @@ public class FiringReadyRoom extends Fragment {
             selfId = randomString(20);
             postFile = new String();
             for (index = 0; index < up_file_cursor.getCount(); index++) {
+                System.out.println("fileUpload for loop, index: " + index);
                 boolean[] checktype = new boolean[AttachParameter.filetype];
                 checktype = AttachParameter.checktype(attachment);
                 // 如果選擇的是影片，則計算他的影片長度、大小，目的是要傳給ffmpeg使用

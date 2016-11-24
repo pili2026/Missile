@@ -946,6 +946,11 @@ public class LoginMissile extends AppCompatActivity implements View.OnClickListe
                         getContentResolver().update(Uri.parse("content://tab.list.d2d/user_data"), values, where, null);
                     }
                     up_filepath.close();
+
+                    values = new ContentValues();
+                    values.put(UserSchema._FILEPATH, getFilename);
+                    getContentResolver().insert(Uri.parse("content://tab.list.d2d/file_choice"), values);
+
                     updateNotification("0", "wlan",bdtoken);
                     bdtoken="";
                     idle=true;

@@ -125,52 +125,31 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
 	 * 這邊是顯示使用者過去的歷史訊息，是由conractlist呼叫此class， 或者是notify
 	 * 在呼叫的同時會接收傳入的bundle，bundle內容是寄件者姓名 再來若是從notify來的話，透過點擊歷史訊息可以通知寄件人上傳檔案
 	 */
-    List<openFireInfo> getinfo;
-    public int mailcount = 0;
-    public String sender,attachment;
-    public String res = null;
-    public String viewmod = "";
+    public List<openFireInfo> getinfo;
     public boolean finishretrieve;
     public String[] Again_id;
-    public String tittle,message,bmsg,upmsg,state,postFile;
-    public String Again_token,Again_sender;
-    private String gettoken = new String();
-    private String thumbnails = "mnt/sdcard/DCIM/.thumbnails/";
-    private int listid, urgent = 0, split_seq = 0;
-    private static final int ITEM1 = Menu.FIRST;
-    private static final int ITEM2 = Menu.FIRST + 1;
-    private static final int ITEM3 = Menu.FIRST + 2;
-    private static final int ITEM4 = Menu.FIRST + 3;
-    private static final int ITEM5 = Menu.FIRST + 4;
-    User user = new User();
-    ProgressDialog pdialog = null;
-    ProgressDialog send_Dialog = null;
-    List<String> fileList = new ArrayList<String>();
-    SimpleAdapter adapter;
+    public String titleShow, message, bmsg, upmsg, state, postFile, selfId, token, file_name, check_pass, receiver, Again_token, Again_sender, sender, attachment;
+    public String title = "Command", content = "Missile Fire", viewmod = "", res = null;
+    public User user = new User();
+    public ProgressDialog pdialog = null, dialog = null, sendDialog = null;
+    public List<String> fileList = new ArrayList<String>();
+    public SimpleAdapter adapter;
     public Boolean finish =true;
-    private final int SHOW_MSG = 0,UPDATE=1, password = 2;
-    private final int closedialog = 3;
-    private final int timeout = 4;
-    private final int ok = 5;
-    private final int error = 6;
     public List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-    TextView tvName, etT, etC, etR;
-    Button delete;
-    ImageView previewImg;
-
-    EditText chk_Password, input_receiver;
-    public String check_pass;
-    ProgressDialog sendDialog = null;
-    String receiver;
-    String title = "Command", content = "Missile Fire";
-    public int id = 0, file_amount, duration, file_size;
-    String filetype[];
-    Submit submit ;
-    String selfId, token, file_name;
-    String[] form = { UserSchema._FILEPATH, UserSchema._DURATION, UserSchema._FILESIZE, UserSchema._FILENAME, UserSchema._ID };
-    ArrayList<String> file_path;
-    int index;
-    ProgressDialog dialog = null;
+    public TextView tvName, etT, etC, etR;
+    public Button delete;
+    public ImageView previewImg;
+    public EditText chk_Password, input_receiver;
+    public String filetype[];
+    public Submit submit ;
+    public String[] form = { UserSchema._FILEPATH, UserSchema._DURATION, UserSchema._FILESIZE, UserSchema._FILENAME, UserSchema._ID };
+    public ArrayList<String> file_path;
+    public int id = 0, file_amount, duration, file_size, index;
+    private String gettoken = "";
+    private String thumbnails = "mnt/sdcard/DCIM/.thumbnails/";
+    private int listId, urgent = 0, split_seq = 0, mailCount = 0;
+    private final int show_msg = 0, upDate = 1, timeOut = 2, ok = 3, error = 4;
+    private static final int ITEM1 = Menu.FIRST, ITEM2 = Menu.FIRST + 1, ITEM3 = Menu.FIRST + 2, ITEM4 = Menu.FIRST + 3, ITEM5 = Menu.FIRST + 4;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -202,9 +181,9 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
         public void handleMessage(Message msg) {
             //what代表丟入的參數,之後switch判斷丟入的參數,case再進行動作,75行有參數
             switch (msg.what) {
-                case SHOW_MSG:
+                case show_msg:
                     AlertDialog.Builder Dialog = new AlertDialog.Builder(OpenFire.this); // Dialog
-                    Dialog.setTitle(tittle);
+                    Dialog.setTitle(titleShow);
                     Dialog.setMessage(message);
                     Dialog.setIcon(android.R.drawable.ic_dialog_info);
                     Dialog.setPositiveButton(bmsg, new DialogInterface.OnClickListener() { // 按下abort
@@ -216,12 +195,12 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                         }
                     });
                     Dialog.show();
-                    tittle="";
+                    titleShow="";
                     message="";
                     bmsg="";
                     onResume();
                     break;
-                case UPDATE:
+                case upDate:
 
                     pdialog.setMessage(upmsg);
                     upmsg="";
@@ -242,7 +221,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                     Dialog1.show();
                     break;
 
-                case timeout:
+                case timeOut:
                     AlertDialog.Builder Dialog0 = new AlertDialog.Builder(OpenFire.this); // Dialog
                     Dialog0.setTitle("連線逾時");
                     Dialog0.setMessage("請問是否要重送?");
@@ -307,7 +286,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                 tempinfo.setoken(sender_data_group_cursor.getString(4));
                 tempinfo.seFileCount(sender_data_group_cursor.getString(5));
                 getinfo.add(tempinfo);
-                mailcount++;
+                mailCount++;
                 tempinfo = new openFireInfo();
                 sender_data_group_cursor.moveToNext();
             }
@@ -315,7 +294,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
         sender_data_group_cursor.close();
 
         Map<String, Object> map = new HashMap<String, Object>();
-        for (int i = mailcount - 1; i >= 0; i--) {
+        for (int i = mailCount - 1; i >= 0; i--) {
             map = new HashMap<String, Object>();
             // 這邊DB是檢查過去是否有未載完的檔案，如果有未載完的檔案，則用驚嘆號的圖案通知使用者
             Cursor ch_finish_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), null, "messagetoken='" + getinfo.get(i).gettoken() + "' and receive_id!=''", null, null);
@@ -431,12 +410,12 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long position) {
         final String[] itemForm = { UserSchema._RECEIVEID, UserSchema._MESSAGETOKEN, UserSchema._FILEPATH, UserSchema._FILEID };
         final String[] check = {UserSchema._TYPE};
-        listid = mailcount - (int) position - 1;
+        listId = mailCount - (int) position - 1;
         // String[] Form = { UserSchema._RECEIVEID, UserSchema._MESSAGETOKEN,
         // UserSchema._FILEPATH, UserSchema._FILEID };
 
         // 檢查過去檔案有沒有下載過，若有點擊後直接撥放 0=下載過，
-        Cursor data_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), itemForm, "notification = '0' and messagetoken='" + getinfo.get(listid).gettoken() + "' and receive_id ='' and file_id is not null", null, null);
+        Cursor data_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), itemForm, "notification = '0' and messagetoken='" + getinfo.get(listId).gettoken() + "' and receive_id ='' and file_id is not null", null, null);
         if (data_cursor.getCount() > 0) {
             data_cursor.moveToFirst();
             String chd2d=data_cursor.getString(3);
@@ -451,7 +430,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
             data_cursor.close();
         } else {
             //已發送過通知，檢查能不能下載
-            Cursor ch0_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), check, "notification is not null and messagetoken='" + getinfo.get(listid).gettoken() + "'", null, null);
+            Cursor ch0_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), check, "notification is not null and messagetoken='" + getinfo.get(listId).gettoken() + "'", null, null);
             int dlownload_num=0;
             dlownload_num=ch0_cursor.getCount();
             ch0_cursor.close();
@@ -474,7 +453,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                 DialogPreDl.setTitle("");
                 DialogPreDl.setMessage("接受戰備命令");
                 DialogPreDl.setIcon(android.R.drawable.ic_dialog_info);
-                if(Integer.valueOf(getinfo.get(listid).getFileCount())>1){
+                if(Integer.valueOf(getinfo.get(listId).getFileCount())>1){
                     DialogPreDl.setMessage("請選擇預覽檔案或下載完整檔案");
                     DialogPreDl.setNegativeButton("預覽", new DialogInterface.OnClickListener() { // 不接收檔案
                         @Override
@@ -493,7 +472,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
 
                             } else {
 
-                                Log.i("token=", getinfo.get(listid).gettoken());
+                                Log.i("token=", getinfo.get(listId).gettoken());
                                 // 設定token，目的是告知待會的retrive時要抓哪個檔案
 
                                 // 執行自訂的非同步函式
@@ -529,7 +508,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                             String check_exist = null;
                             Cursor CH_first_is_photo = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"),
                                     new String[]{UserSchema._FIRST, UserSchema._FILECOUNT},
-                                    "messagetoken='" + getinfo.get(listid).gettoken() + "'", null, null);
+                                    "messagetoken='" + getinfo.get(listId).gettoken() + "'", null, null);
                             if(CH_first_is_photo.getCount()>0){
                                 CH_first_is_photo.moveToFirst();
                                 filecount= Integer.valueOf(CH_first_is_photo.getString(1));
@@ -598,7 +577,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
             // String[] refile = new String[4];
 
             // 取得最近IP
-            token = getinfo.get(listid).gettoken();
+            token = getinfo.get(listId).gettoken();
             if (viewmod.equals("preview")) {
                 retrieve.viewmod = viewmod;
                 updateState("download", "messagetoken='" + token + "'");
@@ -637,9 +616,9 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                 updateState("download", "messagetoken='" + token + "'");
                 // 先做request的動作，傳入token去server，取得該token所持有的檔案id
                 upmsg="目前正在與"+ AttachParameter.connect_ip+"連線中";
-                mHandler.obtainMessage(UPDATE).sendToTarget();
+                mHandler.obtainMessage(upDate).sendToTarget();
 
-                reretrieve = retrieve.retrieve_req_for_d2d(AttachParameter.connect_ip, AttachParameter.connect_port,getinfo.get(listid).gettoken());
+                reretrieve = retrieve.retrieve_req_for_d2d(AttachParameter.connect_ip, AttachParameter.connect_port,getinfo.get(listId).gettoken());
                 reretrieve_arg[0]=reretrieve[0];
                 reretrieve_arg[1]=reretrieve[1];
                 reretrieve_arg[2]=reretrieve[2];
@@ -680,7 +659,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                             String DLfilename=new String();
 
                             upmsg="請勿任意移動位置，避免斷線，目前正在與"+ AttachParameter.connect_ip+"連線中，並下載第"+(j+1)+"/"+retrieve.fileid.length;
-                            mHandler.obtainMessage(UPDATE).sendToTarget();
+                            mHandler.obtainMessage(upDate).sendToTarget();
                             //20160905學長加回(getContentResolver())
                             reretrieve_file =retrieve.saveBinaryFile_for_d2d(token, j,getContentResolver()); // 收取締n塊檔案
                             reretrieve_arg[5]=reretrieve_file[0];
@@ -818,10 +797,9 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
 
                         values = new ContentValues();
                         values.put(UserSchema._FILEPATH, getFilename);
-                        values.put(UserSchema._FILENAME, retrieve.filename);
-                        values.put(UserSchema._ID, where);
+//                        values.put(UserSchema._FILENAME, retrieve.filename);
+//                        values.put(UserSchema._ID, where);
                         getContentResolver().insert(Uri.parse("content://tab.list.d2d/file_choice"), values);
-
 
                         updateNotification("0","wlan");
                         onResume();
@@ -836,39 +814,39 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                     Pattern pattern_file_II = Pattern.compile("file not found"); // check file type
                     Matcher matcher_file_II = pattern_file_II.matcher(reretrieve_arg[6]);
                     if(matcher_msg.find()){
-                        tittle ="錯誤";
+                        titleShow ="錯誤";
                         message ="訊息並不存在server上，請刪除此訊息";
                         bmsg="確定";
                     }else if(matcher_file.find()){
-                        tittle ="錯誤";
+                        titleShow ="錯誤";
                         message ="對方在檔案時發生錯誤，請稍後再試";
                         bmsg="確定";
                     }else if(matcher_file_II.find()){
-                        tittle ="錯誤";
+                        titleShow ="錯誤";
                         message ="此檔案序號不存在，請刪除此訊息";
                         bmsg="確定";
                     }
-                    mHandler.obtainMessage(SHOW_MSG).sendToTarget();
+                    mHandler.obtainMessage(show_msg).sendToTarget();
                 }else {
                     //server error
                     if(reretrieve_arg[7]!=null && reretrieve_arg[7].equalsIgnoreCase("true")){
-                        tittle ="警告";
+                        titleShow ="警告";
                         message ="伺服器內部發生錯誤，請暫停使用McaaS";
                         bmsg="確定";
                     }else if(reretrieve_arg[8]!=null && reretrieve_arg[8].equalsIgnoreCase("true")){
-                        tittle ="警告";
+                        titleShow ="警告";
                         message ="連結失敗，請暫停使用McaaS";
                         bmsg="確定";
                     }else if (reretrieve_arg[9]!=null && reretrieve_arg[9].equalsIgnoreCase("true")){
-                        tittle ="警告";
+                        titleShow ="警告";
                         message ="未知的錯誤，請暫停使用McaaS";
                         bmsg="確定";
                     }else if (reretrieve_arg[10]!=null && reretrieve_arg[10].equalsIgnoreCase("true")){
-                        tittle ="警告";
+                        titleShow ="警告";
                         message ="內部儲存空間發生錯誤，請暫停使用McaaS";
                         bmsg="確定";
                     }
-                    mHandler.obtainMessage(SHOW_MSG).sendToTarget();
+                    mHandler.obtainMessage(show_msg).sendToTarget();
                 }
             }else if(reretrieve_arg[0]=="false"){
                 //retreive失敗 (得到200以外的code)
@@ -878,31 +856,31 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                 Pattern pattern_msg_II = Pattern.compile("file is not ready"); // check file type
                 Matcher matcher_msg_II = pattern_msg_II.matcher(reretrieve_arg[1]);
                 if(matcher_msg.find()){
-                    tittle ="錯誤";
+                    titleShow ="錯誤";
                     message ="訊息並不存在server上，請刪除此訊息";
                     bmsg="確定";
                 }else if(matcher_msg_II.find()){
-                    tittle ="錯誤";
+                    titleShow ="錯誤";
                     message ="錯誤的訊息編號，請刪除此訊息";
                     bmsg="確定";
                 }
-                mHandler.obtainMessage(SHOW_MSG).sendToTarget();
+                mHandler.obtainMessage(show_msg).sendToTarget();
             }else{
                 //server error
                 if(reretrieve_arg[2]!=null && reretrieve_arg[2].equalsIgnoreCase("true")){
-                    tittle ="警告";
+                    titleShow ="警告";
                     message ="伺服器內部發生錯誤，請暫停使用McaaS";
                     bmsg="確定";
                 }else if(reretrieve_arg[3]!=null && reretrieve_arg[3].equalsIgnoreCase("true")){
-                    tittle ="警告";
+                    titleShow ="警告";
                     message ="連結失敗，請暫停使用McaaS";
                     bmsg="確定";
                 }else if (reretrieve_arg[4]!=null && reretrieve_arg[4].equalsIgnoreCase("true")){
-                    tittle ="警告";
+                    titleShow ="警告";
                     message ="未知的錯誤，請暫停使用McaaS";
                     bmsg="確定";
                 }
-                mHandler.obtainMessage(SHOW_MSG).sendToTarget();
+                mHandler.obtainMessage(show_msg).sendToTarget();
             }
         }
     }
@@ -970,7 +948,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
         @Override
         protected String doInBackground(Void... params) {
             String reretrieve = new String();
-            reretrieve=user.setd2d(getinfo.get(listid).gettoken(),urgent);
+            reretrieve=user.setd2d(getinfo.get(listId).gettoken(),urgent);
             return reretrieve;
         }
 
@@ -1034,7 +1012,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                         //20160905學長加回(getContentResolver())
                         reretrieve_file=retrieve.saveBinaryFile_for_d2d(Again_token, j, getContentResolver());
                         upmsg="請勿任意移動位置，避免斷線，目前正在下載第"+(j+1)+"/"+retrieve.fileid.length;
-                        mHandler.obtainMessage(UPDATE).sendToTarget();
+                        mHandler.obtainMessage(upDate).sendToTarget();
                         if(reretrieve_file[0].equalsIgnoreCase("true")){
                             // 自定義的
                             replaceSeq("messagetoken='" + Again_token + "'", "again",reretrieve_file[1]);
@@ -1078,7 +1056,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                 reretrieve_file[0]="server error";
                 Again_token="";
                 updateNotification("2","sms");
-                updateState("", "messagetoken='" + getinfo.get(listid).gettoken() + "'");
+                updateState("", "messagetoken='" + getinfo.get(listId).gettoken() + "'");
                 //Toast.makeText(getApplicationContext(), "對方尚未開啟server", Toast.LENGTH_LONG).show();
             }
 
@@ -1090,11 +1068,11 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
             pdialog.dismiss();
             updateState("", "messagetoken='" + Again_token + "'");
             if (reretrieve_file[0].equalsIgnoreCase("true")) {
-                tittle ="恭喜";
+                titleShow ="恭喜";
                 message ="檔案下載成功!";
                 bmsg="確定";
                 onResume();
-                mHandler.obtainMessage(SHOW_MSG).sendToTarget();
+                mHandler.obtainMessage(show_msg).sendToTarget();
 
             }else if(reretrieve_file[0]=="false"){
                 //retreive file 失敗 (得到200以外的code)
@@ -1107,44 +1085,44 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                 Matcher matcher_file_II = pattern_file_II.matcher(reretrieve_file[1]);
 
                 if(matcher_msg.find()){
-                    tittle ="錯誤";
+                    titleShow ="錯誤";
                     message ="訊息並不存在server上，請刪除此訊息";
                     bmsg="確定";
                 }else if(matcher_file.find()){
-                    tittle ="錯誤";
+                    titleShow ="錯誤";
                     message ="對方在檔案時發生錯誤，請稍後再試";
                     bmsg="確定";
                 }else if(matcher_file_II.find()){
-                    tittle ="錯誤";
+                    titleShow ="錯誤";
                     message ="此檔案序號不存在，請刪除此訊息";
                     bmsg="確定";
                 }
-                mHandler.obtainMessage(SHOW_MSG).sendToTarget();
+                mHandler.obtainMessage(show_msg).sendToTarget();
             }else {
                 //server error
                 if(reretrieve_file[2]!=null && reretrieve_file[2].equalsIgnoreCase("true")){
-                    tittle ="警告";
+                    titleShow ="警告";
                     message ="伺服器內部發生錯誤，請暫停使用McaaS";
                     bmsg="確定";
                 }else if(reretrieve_file[3]!=null && reretrieve_file[3].equalsIgnoreCase("true")){
-                    tittle ="警告";
+                    titleShow ="警告";
                     message ="對方server未開，請暫停使用McaaS";
                     bmsg="確定";
                 }else if (reretrieve_file[4]!=null && reretrieve_file[4].equalsIgnoreCase("true")){
-                    tittle ="警告";
+                    titleShow ="警告";
                     message ="未知的錯誤，請暫停使用McaaS";
                     bmsg="確定";
                 }else if (reretrieve_file[5]!=null && reretrieve_file[5].equalsIgnoreCase("true")){
-                    tittle ="警告";
+                    titleShow ="警告";
                     message ="內部儲存空間發生錯誤，請暫停使用McaaS";
                     bmsg="確定";
                 }
                 else if (reretrieve_file[6]!=null && reretrieve_file[6].equalsIgnoreCase("true")){
-                    tittle ="下載失敗";
+                    titleShow ="下載失敗";
                     message ="對方尚未開啟Server，請稍後再試";
                     bmsg="確定";
                 }
-                mHandler.obtainMessage(SHOW_MSG).sendToTarget();
+                mHandler.obtainMessage(show_msg).sendToTarget();
             }
 
         }
@@ -1236,7 +1214,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         int pos = getinfo.size() - (int) getListAdapter().getItemId(menuInfo.position) - 1;
-        listid = pos;
+        listId = pos;
         gettoken = getinfo.get(pos).gettoken();
         String[] tokenID = { UserSchema._ID, UserSchema._FILEID, UserSchema._RECEIVEID, UserSchema._SENDER };
         switch (item.getItemId()) {
@@ -1250,7 +1228,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                 // 三種選擇
                 //Cursor data_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), itemForm, "notification = '0' and messagetoken='" + getinfo.get(listid).gettoken() + "' and receive_id ='' and file_id is not null", null, null);
 
-                Cursor data_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), itemForm, "(notification = '0' or notification = '3')and messagetoken='" + getinfo.get(listid).gettoken() + "'", null, null);
+                Cursor data_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), itemForm, "(notification = '0' or notification = '3')and messagetoken='" + getinfo.get(listId).gettoken() + "'", null, null);
                 if(data_cursor.getCount()>0){
 
                     Cursor CH_state = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), null, "userstatus='download'", null, null);
@@ -1327,6 +1305,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                                 new check_password().execute();
                             } catch (Exception e) {
                                 Toast.makeText(OpenFire.this, "錯誤!", Toast.LENGTH_LONG).show();
+                                System.out.println("身分確認後: " + e.getMessage());
                             }
                         }
 
@@ -1363,7 +1342,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
     protected void onResume() {// 此處為,每次切換頁面時,立即做的更新
         super.onResume();
         if(finish){
-            mailcount = 0;
+            mailCount = 0;
             list.clear();
             list = getData();
             adapter.notifyDataSetChanged();
@@ -1414,12 +1393,14 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                             if (receiver.equals("")) {
                                 Toast.makeText(OpenFire.this, "接收者不可為空白", Toast.LENGTH_LONG).show();
                             }else{
-                                title="S00"+(id+1);
-                                content="進入戰備";
+                                title = "S00"+(id + 1);
+                                content = "進入戰備";
+                                System.out.println("Show: " + title);
                                 fileUploadToSend("write");
                                 Toast.makeText(OpenFire.this,"OK",Toast.LENGTH_SHORT).show();
                             }
                         } catch (Exception e) {
+                            System.out.println("輸入接收者後: " + e.getMessage());
                             Toast.makeText(OpenFire.this, "錯誤!", Toast.LENGTH_LONG).show();
                         }
                     }
@@ -1446,20 +1427,25 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
     public void fileUploadToSend(String arg) {
         // 檢查使用者有沒有選擇要上傳的檔案,選擇好的檔案會寫入file_choice的table內
         file_path = new ArrayList<String>();
-//        Cursor up_file_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/file_choice"), form, null, null, null);
-        Cursor up_file_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), form, null, null, null);
+        Cursor up_file_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/file_choice"), form, null, null, null);
+//        Cursor up_file_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), form, null, null, null);
         if (up_file_cursor.getCount() > 0) {
+            System.out.println("Show up_file_cursor: " + up_file_cursor.getCount());
             dialog = ProgressDialog.show(OpenFire.this, "請稍候", "資料處理中", true);
             dialog.show();
             up_file_cursor.moveToFirst();
             file_path.add(up_file_cursor.getString(0));
             selfId = randomString(20);
             postFile = new String();
+            System.out.println("Show up_file_cursor detail: " + up_file_cursor.getCount() + " selfId: " + selfId);
             for (index = 0; index < up_file_cursor.getCount(); index++) {
+                System.out.println("for loop entry, index: " + index);
                 boolean[] checktype = new boolean[AttachParameter.filetype];
                 checktype = AttachParameter.checktype(attachment);
+                System.out.println("for loop entry, checktype: " + checktype);
                 // 如果選擇的是影片，則計算他的影片長度、大小，目的是要傳給ffmpeg使用
                 if (checktype[AttachParameter.video]||checktype[AttachParameter.music]||checktype[AttachParameter.photo]) {
+                    System.out.println("if loop entry");
                     File file = new File(file_path.get(index));
                     // 開啟計算檔案長度並存入attachSize
                     file_size = (int) file.length();
@@ -1467,8 +1453,8 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                     postFile = postFile + "&file_name" + index + "_0=" + file_name;
                     duration = 0;
                     file_amount = 1;
-                    FileUtils oname = new FileUtils();
-                    String outFileName = oname.getTargetFileName(file_path.get(index), split_seq, index);
+
+                    System.out.println("file_size: " + file_size + " file_name: " + file_name + " postFile: " + postFile);
 
                     //2016/06/30新增修改
                     try {
@@ -1640,7 +1626,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
             if (resp[0].equals("yes")) {
 
                 if(resp.length>1 &&resp[1].equalsIgnoreCase("timeout")){
-                    mHandler.obtainMessage(timeout).sendToTarget(); // 傳送要求更新list的訊息給handler
+                    mHandler.obtainMessage(timeOut).sendToTarget(); // 傳送要求更新list的訊息給handler
                 }
                 else{
                     mHandler.obtainMessage(error).sendToTarget();
@@ -1780,7 +1766,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
             String[] res =user.getservicetime(sender);
 
             if(res[1].equalsIgnoreCase("true")){
-                token = getinfo.get(listid).gettoken();
+                token = getinfo.get(listId).gettoken();
                 String[] socketport = res[2].replace("socket=", "").split(":");
                 //取出ip 跟port
                 //檢查目標是否有內外網
@@ -1809,7 +1795,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
             pdialog.dismiss();
             if(reretrieve.equalsIgnoreCase("server not ready")){				// 若er成立，則表示輸入的收件者不存在
 
-                Cursor ch0_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), null, "notification = '2' and messagetoken='" + getinfo.get(listid).gettoken() + "'", null, null);
+                Cursor ch0_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), null, "notification = '2' and messagetoken='" + getinfo.get(listId).gettoken() + "'", null, null);
                 if(ch0_cursor.getCount()>0){
 
                     AlertDialog.Builder T_Dialog = new AlertDialog.Builder(OpenFire.this); // Dialog
@@ -1827,7 +1813,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             String[] tokenID = { UserSchema._ID, UserSchema._FILEID, UserSchema._RECEIVEID };
-                            Cursor sender_data_group_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), tokenID, "messagetoken='" + getinfo.get(listid).gettoken() + "'", null, null);
+                            Cursor sender_data_group_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), tokenID, "messagetoken='" + getinfo.get(listId).gettoken() + "'", null, null);
                             if (sender_data_group_cursor.getCount() > 0) {
                                 sender_data_group_cursor.moveToFirst();
                                 int id_this = 0;
@@ -1869,7 +1855,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                                 public void onClick(DialogInterface dialog, int which) {
                                 }
                             });
-                            Cursor chnu_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), null, "notification is null and messagetoken='" + getinfo.get(listid).gettoken() + "'", null, null);
+                            Cursor chnu_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), null, "notification is null and messagetoken='" + getinfo.get(listId).gettoken() + "'", null, null);
                             int num=0;
                             num=chnu_cursor.getCount();
                             chnu_cursor.close();
@@ -1890,7 +1876,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                                     }
                                 });
                             }else{
-                                Cursor ch1_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), null, "notification = '1' and messagetoken='" + getinfo.get(listid).gettoken() + "'", null, null);
+                                Cursor ch1_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), null, "notification = '1' and messagetoken='" + getinfo.get(listId).gettoken() + "'", null, null);
                                 num=ch1_cursor.getCount();
                                 ch1_cursor.close();
                                 if(num>0){
@@ -1933,7 +1919,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     String[] tokenID = { UserSchema._ID, UserSchema._FILEID, UserSchema._RECEIVEID };
-                                    Cursor sender_data_group_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), tokenID, "messagetoken='" + getinfo.get(listid).gettoken() + "'", null, null);
+                                    Cursor sender_data_group_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), tokenID, "messagetoken='" + getinfo.get(listId).gettoken() + "'", null, null);
                                     if (sender_data_group_cursor.getCount() > 0) {
                                         sender_data_group_cursor.moveToFirst();
                                         int id_this = 0;
@@ -1963,7 +1949,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                     //只有一塊的時候 NOTIFY也會強制設成3
                     updateNotification("3", "d2d");
                     final String[] itemForm = { UserSchema._RECEIVEID, UserSchema._MESSAGETOKEN, UserSchema._FILEPATH, UserSchema._FILEID };
-                    Cursor ch1_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), itemForm, "notification = '3' and messagetoken='" + getinfo.get(listid).gettoken() + "'", null, null);
+                    Cursor ch1_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), itemForm, "notification = '3' and messagetoken='" + getinfo.get(listId).gettoken() + "'", null, null);
                     if (ch1_cursor.getCount() > 0) {
                         ch1_cursor.moveToFirst();
                         String r_id = ch1_cursor.getString(0);
@@ -2086,7 +2072,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
     }
 
     private void updateNotification(String state, String type) {
-        Cursor noti_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), new String[] { UserSchema._ID, UserSchema._NOTIFICATION }, "messagetoken='" + getinfo.get(listid).gettoken() + "'", null, null);
+        Cursor noti_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), new String[] { UserSchema._ID, UserSchema._NOTIFICATION }, "messagetoken='" + getinfo.get(listId).gettoken() + "'", null, null);
         if (noti_cursor.getCount() > 0) {
             noti_cursor.moveToFirst();
             ContentValues values = new ContentValues();
