@@ -22,6 +22,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.thunder.missile.Inbox;
 import com.example.thunder.missile.R;
 
 import database.storage.messageProcess;
@@ -126,6 +128,11 @@ public class MainFragment extends AppCompatActivity{
                                 setFragment(3);
                                 drawerLayout.closeDrawer(GravityCompat.START);
                                 return true;
+                            case R.id.Record:
+                                menuItem.setChecked(true);
+                                setFragment(4);
+                                drawerLayout.closeDrawer(GravityCompat.START);
+                                return true;
                             case R.id.Logout:
                                 Intent intent = new Intent();
                                 intent.setClass(MainFragment.this, LoginMissile.class);
@@ -166,6 +173,13 @@ public class MainFragment extends AppCompatActivity{
                 fragmentTransaction = fragmentManager.beginTransaction();
                 MissileSet missileSet = new MissileSet();
                 fragmentTransaction.replace(R.id.fragment, missileSet);
+                fragmentTransaction.commit();
+                break;
+            case 4:
+                fragmentManager = getSupportFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                Record record = new Record();
+                fragmentTransaction.replace(R.id.fragment, record);
                 fragmentTransaction.commit();
                 break;
 

@@ -366,6 +366,7 @@ public class LoginMissile extends AppCompatActivity implements View.OnClickListe
                     intent.putExtras(bundle);
                     intent.setClass(LoginMissile.this, MainFragment.class);
                     startActivity(intent);
+
                 }
                 break;
         }
@@ -563,9 +564,10 @@ public class LoginMissile extends AppCompatActivity implements View.OnClickListe
                     btnIn.setEnabled(true);
                     btnFrie.setEnabled(true);
                     btnEdit.setEnabled(true);
+
+                    btnReg.setBackgroundResource(R.drawable.record);
                     // 隱藏註冊紐
-                    //reg_bn.setBackgroundResource(R.drawable.dra_custom_btn);
-                    btnReg.setVisibility(View.INVISIBLE);
+//                    btnReg.setVisibility(View.INVISIBLE);
                     retrieving = false;
 
                     if (AttachParameter.priority == 0){

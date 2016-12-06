@@ -17,6 +17,10 @@
             android:id="@+id/Notify"
             android:icon="@drawable/noti_nav"
             android:title="系統通知" />
+        <item
+            android:id="@+id/Record"
+            android:icon="@drawable/noti_nav"
+            android:title="紀錄" />
 
 
     </group>
