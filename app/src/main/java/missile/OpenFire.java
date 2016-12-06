@@ -1373,22 +1373,22 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                     System.out.println("file_size: " + file_size + " file_name: " + file_name + " postFile: " + postFile);
 
                     //2016/06/30新增修改
-                    try {
-                        FileInputStream inputStream = new FileInputStream(new File(file_path.get(index)));
-                        byte[] data = new byte[1024];
-                        FileOutputStream outputStream =new FileOutputStream(new File(Environment.getExternalStorageDirectory().toString() + File.separator + "KM" + "/"+file_name));
-                        while (inputStream.read(data) != -1) {
-                            outputStream.write(data);
-                        }
-                        inputStream.close();
-                        outputStream.close();
-                    } catch (FileNotFoundException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }  catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+//                    try {
+//                        FileInputStream inputStream = new FileInputStream(new File(file_path.get(index)));
+//                        byte[] data = new byte[1024];
+//                        FileOutputStream outputStream =new FileOutputStream(new File(Environment.getExternalStorageDirectory().toString() + File.separator + "KM" + "/"+file_name));
+//                        while (inputStream.read(data) != -1) {
+//                            outputStream.write(data);
+//                        }
+//                        inputStream.close();
+//                        outputStream.close();
+//                    } catch (FileNotFoundException e) {
+//                        // TODO Auto-generated catch block
+//                        e.printStackTrace();
+//                    }  catch (IOException e) {
+//                        // TODO Auto-generated catch block
+//                        e.printStackTrace();
+//                    }
 
                     ContentValues values = new ContentValues();
                     values.put(UserSchema._FILEPATH, Environment.getExternalStorageDirectory().toString() + File.separator + "KM" + "/"+file_name);//2016/06/30新增修改
