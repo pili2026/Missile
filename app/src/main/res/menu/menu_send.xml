@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.videumcorp.desarrolladorandroid.navigationdrawerandroidsupportlibrary.Edit">
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        android:title="@string/idSet"/>
+    <item android:id="@+id/logout"
+        app:showAsAction="never"
+        android:title="@string/change"/>
+    <item
+        android:id="@+id/encry"
+        app:showAsAction="never"
+        android:title="加密"/>
+
+    <item android:id="@+id/action_add"
+        android:title="@string/action_add"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_content_send"/>
+
+    <item android:id="@+id/send"
+        android:icon="@drawable/ic_action_send_now"
+        app:showAsAction="ifRoom"
+        android:title="@string/send"
+        />
+
+
+</menu>

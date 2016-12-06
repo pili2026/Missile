@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal">
+
+
+    <ImageView
+        android:id="@+id/notiimg"
+        android:layout_width="45sp"
+        android:layout_height="45sp"
+        android:layout_margin="5px"
+        android:layout_below="@id/toolbar"/>
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5sp"
+        android:layout_toRightOf="@+id/notiimg"
+        android:orientation="vertical"
+        android:layout_below="@id/toolbar">
+
+        <TextView
+            android:id="@+id/notititle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5px"
+            android:text="TextView"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/notiinfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="TextView2"
+            android:textColor="#000000"
+            android:textSize="17sp"
+            android:paddingRight="5dip"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/notidate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5sp"
+        android:text="TextView"
+        android:textColor="#000000"
+        android:textSize="10sp"
+        android:paddingRight="5dip"
+        android:layout_alignBottom="@+id/linearLayout1"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/notidate"
+        android:layout_alignTop="@+id/notiimg"
+        android:text="TextView" />
+
+</RelativeLayout>

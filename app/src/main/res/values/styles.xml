@@ -1,0 +1,68 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/md_teal_900</item>
+        <item name="colorPrimaryDark">@color/md_teal_A400</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="NavigationViewTheme" parent="AppTheme">
+        <item name="textAppearanceListItem">@style/TextAppearance.AppCompat.Body2</item>
+    </style>
+
+    <style name="MyCheckBox" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/checkbox_selector</item>
+        <item name="android:paddingLeft">25.0dip</item>
+        <item name="android:maxHeight">10.0dip</item>
+    </style>
+
+    <style name="ToolbarTheme" parent="AppTheme">
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+    </style>
+
+    <style name="log_bn" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/log_custom_btn</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="reg_bn" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/reg_custom_btn</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="fireready_bn" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/fireready_btn</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="fire_bn" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/fire_btn</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="ed_bn" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/ed_custom_btn</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="in_bn" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/in_custom_btn</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="login_bn" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/login_btn</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+</resources>
