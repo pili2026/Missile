@@ -1370,7 +1370,6 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                     postFile = postFile + "&file_name" + index + "_0=" + file_name;
                     duration = 0;
                     file_amount = 1;
-
                     System.out.println("file_size: " + file_size + " file_name: " + file_name + " postFile: " + postFile);
 
                     //2016/06/30新增修改
