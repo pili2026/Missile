@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import mcs.LoginInput;
+import tab.list.AttachParameter;
 
 
 /**
@@ -32,7 +33,7 @@ public class Submit {
         submitreadLine = new String();
         response = false;
         LoginException = false;
-        aliveIp =  LoginInput.Homeip;
+        aliveIp =  AttachParameter.Homeip;
     }
 
     public String getFilename() {
@@ -48,7 +49,7 @@ public class Submit {
         HttpRequest request = null;
         try {
 
-            String pathUrl = "http://" + LoginInput.Homeip + "/wsgi/cms/submit/";
+            String pathUrl = "http://" + AttachParameter.Homeip + "/wsgi/cms/submit/";
             request = HttpRequest.post(pathUrl);
 
             //20160905學長推想更改

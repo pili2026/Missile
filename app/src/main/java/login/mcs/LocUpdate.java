@@ -3,6 +3,7 @@ package login.mcs;
 import com.github.kevinsawicki.http.HttpRequest;
 
 import mcs.LoginInput;
+import tab.list.AttachParameter;
 
 
 /**
@@ -38,7 +39,7 @@ public class LocUpdate {
         String ip="";
         try {
 
-            String pathUrl = "http://" + LoginInput.Homeip + "/wsgi/cms/getip/?user="+username;
+            String pathUrl = "http://" + AttachParameter.Homeip + "/wsgi/cms/getip/?user="+username;
             HttpRequest request = HttpRequest.get(pathUrl);
             // 這邊requestString是subject、content、receiver、filecnt、length、file_name(至少一個)
             ip = request.header("cookie", Login.latest_cookie).body();

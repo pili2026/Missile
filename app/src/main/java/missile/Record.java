@@ -41,7 +41,7 @@ class copyofcontactinfo // 本class用來記錄list中的資料
 
     copyofcontactinfo() {
         date = new String();
-        contact = new String();
+        contact = "";
         img = new String();
         msg = new String();
     }
@@ -114,11 +114,11 @@ public class Record extends Fragment implements AdapterView.OnItemClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.tab_list, container, false);
+        final View view = inflater.inflate(R.layout.blist, container, false);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("紀錄");
 
         adapter = new SimpleAdapter(getActivity(), getData(), R.layout.inbox, new String[] { "contacttitle", "contactinfo", "contactimg", "contactdate" }, new int[] { R.id.contacttitle, R.id.contactinfo, R.id.contactimg, R.id.contactdate });
-        Audiolist = (ListView) view.findViewById(R.id.PhoneVideoList);
+        Audiolist = (ListView) view.findViewById(R.id.Missile_modle);
         Audiolist.setTextFilterEnabled(true);
         Audiolist.setBackgroundResource(R.drawable.worldbackground);
         Audiolist.setCacheColorHint(Color.TRANSPARENT);

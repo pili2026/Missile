@@ -822,7 +822,7 @@ public class LoginMissile extends AppCompatActivity implements View.OnClickListe
             // 抓取的欄位名稱：user_data資料表中ID值，條件：itemclick點擊時所得的token
             updateState("download", "messagetoken='" + token + "'");
             // 先做request的動作，傳入token去server，取得該token所持有的檔案id
-            reretrieve = retrieve.retrieve_req_for_d2d(LoginInput.connect_ip, LoginInput.connect_port,bdtoken);
+            reretrieve = retrieve.retrieve_req_for_d2d(AttachParameter.connect_ip, AttachParameter.connect_port,bdtoken);
             reretrieve_arg[0]=reretrieve[0];
             reretrieve_arg[1]=reretrieve[1];
             reretrieve_arg[2]=reretrieve[2];
@@ -834,7 +834,7 @@ public class LoginMissile extends AppCompatActivity implements View.OnClickListe
             if (reretrieve[0] == "true"){ // retrieve_req=ret=0
 
                 //========20160905加入===========//
-                notify_msg="正在接收來自於: "+ LoginInput.connect_ip+"的"+retrieve.fileid[i].substring(retrieve.fileid[i].indexOf("/KM/")+4,retrieve.fileid[i].length());
+                notify_msg="正在接收來自於: "+ AttachParameter.connect_ip+"的"+retrieve.fileid[i].substring(retrieve.fileid[i].indexOf("/KM/")+4,retrieve.fileid[i].length());
                 ss=10;
                 mHandler.obtainMessage(SHOW_NOTIFY).sendToTarget();
                 //========20160905加入===========//
@@ -1567,14 +1567,14 @@ public class LoginMissile extends AppCompatActivity implements View.OnClickListe
                                         //檢查目標是否有內外網
                                         if(AttachParameter.out_ip.equals(socketport[0])){
                                             //外網ip相同，給內網ip
-                                            LoginInput.connect_ip=socketport[1];
+                                            AttachParameter.connect_ip=socketport[1];
                                             System.out.println("這邊是 d2d socketport[1]="+socketport[1]);
                                         }else{
                                             //外網ip不同，給外網
-                                            LoginInput.connect_ip=socketport[0];
+                                            AttachParameter.connect_ip=socketport[0];
                                             System.out.println("這邊是 d2d socketport[0]="+socketport[0]);
                                         }
-                                        LoginInput.connect_port=socketport[2];
+                                        AttachParameter.connect_port=socketport[2];
                                         updateNotification("3", "d2d",bdtoken);
                                         new startretrieve().execute();
 

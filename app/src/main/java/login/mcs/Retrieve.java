@@ -36,17 +36,14 @@ public class Retrieve {
     public Retrieve() {
     }
 
-    // public String aliveIp = new String();
     public String token = new String();
     public String filename = new String();
     public String savefilename = new String();
     public String fileid[];
     // public boolean retreivereqfailed = false;
-    public boolean retrieveRes = false;
     public String rreqreadLine = new String();
     public String[] retrieveFileCount;
     public String viewmod = "";
-    public String sdcardPath_2 = Environment.getExternalStorageDirectory().toString() + File.separator + "Download" + "/";
 
     // 設定token
     public void settoken(String arg) {
@@ -66,7 +63,7 @@ public class Retrieve {
         String reretrieve[] = new String[5];
         try {
 
-            String pathUrl = "http://" + LoginInput.Homeip + "/wsgi/cms/retrieve/";
+            String pathUrl = "http://" + AttachParameter.Homeip + "/wsgi/cms/retrieve/";
             HttpRequest request = HttpRequest.post(pathUrl);
             // 設定cookie並傳入token
             int responseCode = request.header("cookie", Login.latest_cookie).send("token=" + token + "&mod=" + mod).code();
@@ -192,7 +189,7 @@ public class Retrieve {
         //[0]判斷是否成功、[1]body、[2]系統錯誤、[3]例外處理-Request、[4]例外處理-未知錯誤
         String body;
         try {
-            String pathUrl = "http://" + LoginInput.Homeip + "/wsgi/cms/retrieve_file/";
+            String pathUrl = "http://" + AttachParameter.Homeip + "/wsgi/cms/retrieve_file/";
             HttpRequest request = HttpRequest.post(pathUrl);
 			/*
 			 * 這邊使用key value的方式傳值，當然也是可以照傳統的一個字串把欲傳送的資訊串再一起，但是用key value方式也不失閱讀
@@ -265,7 +262,7 @@ public class Retrieve {
         try {
             String path=fileid[i].substring(0,fileid[i].indexOf("/KM/")+4);
             String name=fileid[i].substring(fileid[i].indexOf("/KM/")+4,fileid[i].length());
-            String pathUrl = "http://" + LoginInput.connect_ip+":"+ LoginInput.connect_port +path+ URLEncoder.encode(name, "utf-8").replaceAll("\\+", "%20");
+            String pathUrl = "http://" + AttachParameter.connect_ip+":"+ AttachParameter.connect_port +path+ URLEncoder.encode(name, "utf-8").replaceAll("\\+", "%20");
             HttpRequest request = HttpRequest.get(pathUrl);
 			/*
 			 * 這邊使用key value的方式傳值，當然也是可以照傳統的一個字串把欲傳送的資訊串再一起，但是用key value方式也不失閱讀
@@ -296,7 +293,9 @@ public class Retrieve {
 
                 //20160903抓蟲版加入checktype[AttachParameter.photo](token)
                 if (checktype[AttachParameter.video]||checktype[AttachParameter.photo]) {
-                    savefilename = token+"_"+savefilename.replace(".", "-_" + String.valueOf(i) + ".");
+//                    savefilename = token+"_"+savefilename.replace(".", "-_" + String.valueOf(i) + ".");
+                    savefilename = savefilename.replace(".", "_" + token + ".");
+
                 }
 //                File output1 = new File(sdcardPath_2+savefilename);
                 File output1 = new File(AttachParameter.sdcardPath+savefilename);
@@ -324,7 +323,7 @@ public class Retrieve {
                         get_length_record.close();
 
                         request = HttpRequest.get(pathUrl);
-                        request .header("Referer","http://" + LoginInput.connect_ip+":"+LoginInput.connect_port)
+                        request .header("Referer","http://" + AttachParameter.connect_ip+":"+AttachParameter.connect_port)
                                 .header("Range", "bytes="+downLength+"-"+ String.valueOf((Integer.valueOf(content_length)-1)))
                                 .header("Connection","Keep-Alive")
                                 .header("If-Range",etag)
@@ -364,6 +363,8 @@ public class Retrieve {
 
                                     ContentValues values = new ContentValues();
                                     values.put(UserSchema._LENGTH_RECORD, "&"+update_length);
+                                    values.put(UserSchema._FILEPATH, AttachParameter.sdcardPath);
+                                    values.put(UserSchema._FILENAME, savefilename);
                                     int id_this = Integer.parseInt(update_downrecord.getString(0));
                                     String where = UserSchema._ID + " = " + id_this;
                                     content.update(Uri.parse("content://tab.list.d2d/user_data"), values, where, null);
@@ -382,7 +383,7 @@ public class Retrieve {
                     //檔案未被下載過,有可能這一塊就是音樂
 
                     request = HttpRequest.get(pathUrl);
-                    request.header("Referer","http://" + LoginInput.connect_ip+":"+LoginInput.connect_port+"/")
+                    request.header("Referer","http://" + AttachParameter.connect_ip+":"+AttachParameter.connect_port+"/")
                             .header("Range", "bytes="+downLength+"-"+ String.valueOf((Integer.valueOf(content_length)-1)))
                             .header("Connection","Keep-Alive")
                             .header("If-Range",etag)
@@ -476,13 +477,11 @@ public class Retrieve {
             e.printStackTrace();
         }
     }
-
-
     public String check_file(String localtoken) {
         String reretrieve = new String();
         token = localtoken;
         try {
-            String pathUrl = "http://" + LoginInput.Homeip + "/wsgi/cms/check_file/?token="+token;
+            String pathUrl = "http://" + AttachParameter.Homeip + "/wsgi/cms/check_file/?token="+token;
 
             HttpRequest request = HttpRequest.get(pathUrl);
             // 設定cookie並傳入token
