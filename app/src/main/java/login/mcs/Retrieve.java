@@ -218,6 +218,7 @@ public class Retrieve {
 
                     if (checktype[AttachParameter.video]||checktype[AttachParameter.photo]) {
                         filename = token+"_"+filename.replace(".", "-_" + String.valueOf(i) + ".");
+//                        filename = token+"_"+filename;
                     }
                     File output1 = new File(AttachParameter.sdcardPath+filename);
                     if(!output1.exists()){
@@ -293,11 +294,10 @@ public class Retrieve {
 
                 //20160903抓蟲版加入checktype[AttachParameter.photo](token)
                 if (checktype[AttachParameter.video]||checktype[AttachParameter.photo]) {
-//                    savefilename = token+"_"+savefilename.replace(".", "-_" + String.valueOf(i) + ".");
-                    savefilename = savefilename.replace(".", "_" + token + ".");
+                    savefilename = token+"_"+savefilename.replace(".", "-_" + String.valueOf(i) + ".");
+//                    savefilename = token + savefilename;
 
                 }
-//                File output1 = new File(sdcardPath_2+savefilename);
                 File output1 = new File(AttachParameter.sdcardPath+savefilename);
                 //====20160907學長抓蟲抓到，抓到if要去掉"!"
                 if(output1.exists()){

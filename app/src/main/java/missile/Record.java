@@ -85,13 +85,7 @@ public class Record extends Fragment implements AdapterView.OnItemClickListener{
  * 這邊是顯示有哪些"使用者"寄簡訊給你，同時會顯示最後一次下載的資料
  */
     List<copyofcontactinfo> getcontactinfo;
-    View view;
     ListView Audiolist;
-    String[] listid;
-    boolean finishRetreive = false, newfile = false;
-    String filesize = null;
-    String temp, getTitle, getContent, getSender = null, getFilename;
-    ProgressDialog dialog = null;
     SimpleAdapter adapter;
     List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 
@@ -190,7 +184,7 @@ public class Record extends Fragment implements AdapterView.OnItemClickListener{
 
         intent.putExtras(bundle);
         // intent.setClass(contactlist.this, dialogViewCtrl.class);
-        intent.setClass(getActivity(), ReceiveList.class);
+        intent.setClass(getActivity(), OpenFire.class);
         getActivity().startActivity(intent);
     }//end of onItemClick
     @Override

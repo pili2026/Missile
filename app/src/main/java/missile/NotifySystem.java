@@ -717,7 +717,8 @@ public class NotifySystem extends Fragment implements AdapterView.OnItemClickLis
             String ip =aliveIp[0];
             messageProcess MsgSave = new messageProcess();
             MsgSave.checkwlan(getActivity().getContentResolver(), aliveIp[4]);
-            updateContent(Uri.parse("content://tab.list.d2d/user_data"), "retrievable","content is null",ip);
+            updateContent(Uri.parse("content://tab.list.d2d/user_data"), "retrievable","content is null", ip);
+            updateContent(Uri.parse("content://tab.list.d2d/missile_fire"), "recieve", "content is null", ip);
             MsgSave=null;
             pdialog.dismiss();
             // 要加上失誤的判斷
@@ -748,7 +749,7 @@ public class NotifySystem extends Fragment implements AdapterView.OnItemClickLis
                     }
                     id_this = Integer.valueOf(up_content.getString(0));
                     ContentValues values = new ContentValues();
-                    if (mod.equals("retrievable")) {
+                    if (mod.equals("retrievable")||mod.equals("recieve")) {
                         tittle = reretrieve[0].substring(reretrieve[0].indexOf("subject=") + 8, reretrieve[0].indexOf("&content="));
                         values.put(UserSchema._CONTENT, content);
                         values.put(UserSchema._TITTLE, tittle);
