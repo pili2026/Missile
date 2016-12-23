@@ -329,12 +329,14 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
         Cursor data_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), itemForm, "notification = '0' and messagetoken='" + getinfo.get(listId).gettoken() + "' and receive_id ='' and file_id is not null", null, null);
         if (data_cursor.getCount() > 0) {
             data_cursor.moveToFirst();
-            String chd2d=data_cursor.getString(3);
+            String chd2d = data_cursor.getString(3);
+            String checkImage = data_cursor.getString(2);
+            String filePath = checkImage.replace("&", "");
             if(chd2d.equalsIgnoreCase("d2d")){
                 viewmod ="preview";
-                viewfile(sdcardPath + data_cursor.getString(2));
+                viewfile(sdcardPath + filePath);
             }else{
-                viewfile(sdcardPath + data_cursor.getString(2));
+                viewfile(sdcardPath + filePath);
 
 
             }
