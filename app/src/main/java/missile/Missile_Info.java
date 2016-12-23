@@ -4,46 +4,48 @@ package missile;
  * Created by thunder on 2016/10/4.
  */
 
-class Missile_Info {
-
-    private String contact, img, msg, date;
+class Missile_Info{
+    private String title,content, token, date,filepateh;
 
     Missile_Info() {
+        content = "";
+        title = "";
+        token = "";
         date = "";
-        contact = "";
-        img = "";
-        msg = "";
+        filepateh= "";
     }
 
-    void setdate(String arg) {
+    void setDate(String arg) {
         date = arg;
     }
-
-    void setcontact(String arg) {
-        contact = arg;
+    void setContent(String arg) {
+        content = arg;
     }
 
-    public void setimg(String arg) {
-        img = arg;
+    void setToken(String arg) {
+        token = arg;
     }
-
-    void settittle(String arg) {
-        msg = arg;
+    void setTitle(String arg) {
+        title = arg;
     }
-
-    String getdate() {
+    void setFilepateh(String arg) {
+        filepateh = arg;
+    }
+    String getDate() {
         return date;
     }
-
-    String getcontact() {
-        return contact;
+    String getContent() {
+        return title;
     }
 
-    public String getimg() {
-        return img;
+    String getToken() {
+        return token;
     }
 
-    String getmsg() {
-        return msg;
+    String getTitle() {
+        return title;
+    }
+    String getFilepateh() {
+        return filepateh;
     }
 }

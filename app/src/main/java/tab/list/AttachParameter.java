@@ -48,7 +48,7 @@ public class AttachParameter {
     Bitmap[] thumbnails;
     boolean[] thumbnailsselection;
     String[] arrPath, arrName, Path;
-    Uri uri;
+    private Uri uri;
     public static int music = 0;
     public static int video = 1;
     public static int photo = 2;
@@ -63,10 +63,10 @@ public class AttachParameter {
     public static String in_ip ="0.0.0.0";
     public static String latest_cookie;
     public static String connect_ip,connect_port;
-    public static Boolean wifi = false;
+    private static Boolean wifi = false;
     public static boolean nat = false;
     public static String selfid = new String();
-    public static UPnPPortMapper uPnPPortMapper = new UPnPPortMapper();
+    private static UPnPPortMapper uPnPPortMapper = new UPnPPortMapper();
     public static openserver server;
     public static String Homeip = "140.138.150.26";
     public static String sdcardPath = Environment.getExternalStorageDirectory().toString() + File.separator + "KM" + "/";
@@ -288,9 +288,7 @@ public class AttachParameter {
                         in_ip=foundDeviceInternalIP;
                     }
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (UPNPResponseException e) {
+            } catch (IOException | UPNPResponseException e) {
                 e.printStackTrace();
             }
         }
@@ -323,9 +321,7 @@ public class AttachParameter {
                     }
                 }
             }
-        } catch (SocketException ex) {
-            Log.e("AndroidNetworkAddressFactory", "getLocalIPAddress()", ex);
-        } catch (NullPointerException ex) {
+        } catch (SocketException | NullPointerException ex) {
             Log.e("AndroidNetworkAddressFactory", "getLocalIPAddress()", ex);
         }
         return null;

@@ -1432,7 +1432,7 @@ public class LoginMissile extends AppCompatActivity implements View.OnClickListe
                         messageProcess MsgSave = new messageProcess();
                         MsgSave.checkwlan(getContentResolver(), aliveIp[4]);
                         updateContent(Uri.parse("content://tab.list.d2d/user_data"), "retrievable","content is null");
-                        updateContent(Uri.parse("content://tab.list.d2d/user_data"), "recieve", "content is null");
+                        updateContent(Uri.parse("content://tab.list.d2d/user_data"), "receive", "content is null");
                         updateContent(Uri.parse("content://tab.list.d2d/user_reply"), "reply","filename is null");
                         MsgSave=null;
                         if( aliveIp[4].length()>20){

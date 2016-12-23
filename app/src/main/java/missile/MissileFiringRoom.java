@@ -103,8 +103,7 @@ public class MissileFiringRoom extends Fragment{
     private ListView listView;
     private SimpleAdapter simpleAdapter;
 
-    List<missileInfo> getInfo = new ArrayList<missileInfo>();
-    List<Missile_Info> getMissileInfo;
+    List<Missile_Info> getMissileInfo = new ArrayList<Missile_Info>();
     List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 
     public MissileFiringRoom() {
@@ -286,11 +285,11 @@ public class MissileFiringRoom extends Fragment{
 
     private List<Map<String, Object>> getData() {
 
-        getInfo.clear();
+        getMissileInfo.clear();
         String[] Form = { UserSchema._TITTLE, UserSchema._CONTENT, UserSchema._FILEPATH, UserSchema._DATE, UserSchema._MESSAGETOKEN, UserSchema._FILECOUNT };
-        missileInfo tempinfo = new missileInfo();
+        Missile_Info tempinfo = new Missile_Info();
         // 使用寄件者去撈出 過去中已經讀過的簡訊以及未被刪除的資料,用 tittle跟userstatus去檢查
-        Cursor msg_cursor = getActivity().getContentResolver().query(Uri.parse("content://tab.list.d2d/missile_fire"), Form, "msg='recieve'", null, null);
+        Cursor msg_cursor = getActivity().getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), Form, "msg='receive '", null, null);
         if (msg_cursor.getCount() > 0) {
             msg_cursor.moveToFirst();
             for (int i = 0; i < msg_cursor.getCount(); i++) {
@@ -300,9 +299,9 @@ public class MissileFiringRoom extends Fragment{
                 tempinfo.setDate(msg_cursor.getString(3));
                 tempinfo.setToken(msg_cursor.getString(4));
 
-                getInfo.add(tempinfo);
+                getMissileInfo.add(tempinfo);
                 mailcount++;
-                tempinfo = new missileInfo();
+                tempinfo = new Missile_Info();
                 msg_cursor.moveToNext();
             }
         }
@@ -313,15 +312,15 @@ public class MissileFiringRoom extends Fragment{
             map = new HashMap<String, Object>();
             // 這邊DB是檢查過去是否有未載完的檔案，如果有未載完的檔案，則用驚嘆號的圖案通知使用者
             // put info array into list
-            map.put("title", getInfo.get(i).getTitle());
-            map.put("info", getInfo.get(i).getContent());
-            map.put("date", getInfo.get(i).getDate());
+            map.put("title", getMissileInfo.get(i).getTitle());
+            map.put("info", getMissileInfo.get(i).getContent());
+            map.put("date", getMissileInfo.get(i).getDate());
             // 檢查檔案類型，放置相對應的檔案類型的圖片
-            if(getInfo.get(i).getFilepateh()!=null || !getInfo.get(i).getFilepateh().equals("")){
+            if(getMissileInfo.get(i).getFilepateh()!=null || !getMissileInfo.get(i).getFilepateh().equals("")){
                 boolean[] checktype = new boolean[AttachParameter.filetype];
-                checktype = AttachParameter.checktype(getInfo.get(i).getFilepateh());
+                checktype = AttachParameter.checktype(getMissileInfo.get(i).getFilepateh());
                 Pattern patternmovie = Pattern.compile(".*.movie");
-                Matcher matchermovie = patternmovie.matcher(getInfo.get(i).getFilepateh());
+                Matcher matchermovie = patternmovie.matcher(getMissileInfo.get(i).getFilepateh());
 
                 if (checktype[AttachParameter.music]) // music set a note
                 {
@@ -329,11 +328,11 @@ public class MissileFiringRoom extends Fragment{
                 } else if (checktype[AttachParameter.video]) // video set a camera
                 {
 
-                    String videoSegment[] = getInfo.get(i).getFilepateh().split("&");
+                    String videoSegment[] = getMissileInfo.get(i).getFilepateh().split("&");
                     Bitmap filebitmap;
                     //因為d2d是單一檔案 沒有分割 所以這邊要檢查
                     if(videoSegment.length==1){
-                        filebitmap = android.media.ThumbnailUtils.createVideoThumbnail(sdcardPath + getInfo.get(i).getFilepateh(), MediaStore.Images.Thumbnails.MICRO_KIND);
+                        filebitmap = android.media.ThumbnailUtils.createVideoThumbnail(sdcardPath + getMissileInfo.get(i).getFilepateh(), MediaStore.Images.Thumbnails.MICRO_KIND);
                     }else{
                         filebitmap = android.media.ThumbnailUtils.createVideoThumbnail(sdcardPath + videoSegment[1], MediaStore.Images.Thumbnails.MICRO_KIND);
                     }
@@ -364,7 +363,7 @@ public class MissileFiringRoom extends Fragment{
 
                 } else if (checktype[AttachParameter.photo]) // photo set photo
                 {
-                    map.put("img", sdcardPath + getInfo.get(i).getFilepateh().replace("&", ""));
+                    map.put("img", sdcardPath + getMissileInfo.get(i).getFilepateh().replace("&", ""));
 
                 } else if (matchermovie.find()) {
                     map.put("img", R.drawable.iconvideo);
@@ -380,12 +379,12 @@ public class MissileFiringRoom extends Fragment{
     }
 
     private List<Map<String, Object>> getStaticData() {
-        getInfo.clear();
-        missileInfo tempinfo = new missileInfo();
+        getMissileInfo.clear();
+        Missile_Info tempinfo = new Missile_Info();
 
 
         // 因為是總統，所以直接撈預先設定的資料
-        String[] missile = { FileContentProvider.UserSchema._ID, FileContentProvider.UserSchema._TITTLE, FileContentProvider.UserSchema._CONTENT, FileContentProvider.UserSchema._FILEPATH};
+        String[] missile = { UserSchema._ID, UserSchema._TITTLE, UserSchema._CONTENT, UserSchema._FILEPATH};
         Cursor missile_cursor = getActivity().getContentResolver().query(Uri.parse("content://tab.list.d2d/missile_group"), missile, "state = 'live'", null, null);
         if (missile_cursor.getCount() > 0) {
             missile_cursor.moveToFirst();
@@ -395,8 +394,8 @@ public class MissileFiringRoom extends Fragment{
                 tempinfo.setContent(missile_cursor.getString(2));
                 tempinfo.setFilepateh(missile_cursor.getString(3));
                 // 將自訂物件存入至getinfo
-                getInfo.add(tempinfo);
-                tempinfo = new missileInfo();
+                getMissileInfo.add(tempinfo);
+                tempinfo = new Missile_Info();
                 missile_cursor.moveToNext();
             }
 
@@ -407,24 +406,24 @@ public class MissileFiringRoom extends Fragment{
 	 * 例如簡訊A的notititle為是什麼?從getinfo中拿出來 簡訊A的notiinfo是什麼?一樣也是從getinfo中拿出來
 	 */
         Map<String, Object> map = new HashMap<String, Object>();
-        for (int i = 0; i < getInfo.size(); i++) { // put info array into
+        for (int i = 0; i < getMissileInfo.size(); i++) { // put info array into
             // list
 
             map = new HashMap<String, Object>();
             // 將每筆簡訊的資訊存入到自定義的adapter的資料欄位
-            if(getInfo.get(i).getFilepateh()!=null){
-                map.put("Im_att_missile", getInfo.get(i).getFilepateh());
+            if(getMissileInfo.get(i).getFilepateh()!=null){
+                map.put("Im_att_missile", getMissileInfo.get(i).getFilepateh());
             }
-            if((getInfo.get(i).getTitle()).equals("S001")){
+            if((getMissileInfo.get(i).getTitle()).equals("S001")){
                 map.put("Im_missile_num", R.drawable.missile01);
             }
-            else if(getInfo.get(i).getTitle().equals("S002")){
+            else if(getMissileInfo.get(i).getTitle().equals("S002")){
                 map.put("Im_missile_num", R.drawable.newmissile);
             }
-            else if(getInfo.get(i).getTitle().equals("S003")){
+            else if(getMissileInfo.get(i).getTitle().equals("S003")){
                 map.put("Im_missile_num", R.drawable.newmissile2);
             }
-            if(getInfo.get(i).getTitle().equals("S004")){
+            if(getMissileInfo.get(i).getTitle().equals("S004")){
                 map.put("Im_missile_num", R.drawable.newmissile3);
             }
 
