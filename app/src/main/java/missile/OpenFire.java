@@ -128,12 +128,8 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
     public List<openFireInfo> getinfo;
     public boolean finishretrieve;
     public String[] Again_id;
-<<<<<<< HEAD
-    public String titleShow, message, bmsg, upmsg, state, postFile, selfId, token, file_name, check_pass, receiver, Again_token, Again_sender, sender, attachment;
-=======
     public String titleShow, message, bmsg, upmsg, state, postFile, selfId, token, file_name, attachFile,
             check_pass, receiver, Again_token, Again_sender, sender, attachment, fileName, fileId, attachPath;
->>>>>>> origin/master
     public String title = "Command", content = "Missile Fire", viewmod = "", res = null;
     public User user = new User();
     public ProgressDialog pdialog = null, dialog = null, sendDialog = null;
@@ -152,16 +148,10 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
     public int id = 0, file_amount, duration, file_size, index;
     private String gettoken = "";
     private String thumbnails = "mnt/sdcard/DCIM/.thumbnails/";
-<<<<<<< HEAD
-    private int listId, urgent = 0, split_seq = 0, mailCount = 0;
-    private final int show_msg = 0, upDate = 1, timeOut = 2, ok = 3, error = 4;
-    private static final int ITEM1 = Menu.FIRST, ITEM2 = Menu.FIRST + 1, ITEM3 = Menu.FIRST + 2, ITEM4 = Menu.FIRST + 3, ITEM5 = Menu.FIRST + 4;
-=======
     private int listId, urgent = 0, mailCount = 0;
     private final int show_msg = 0, upDate = 1, timeOut = 2, ok = 3, error = 4;
     private static final int ITEM1 = Menu.FIRST, ITEM2 = Menu.FIRST + 1, ITEM3 = Menu.FIRST + 2, ITEM4 = Menu.FIRST + 3, ITEM5 = Menu.FIRST + 4;
     private static final String TAG = "OpenFire";
->>>>>>> origin/master
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -186,106 +176,9 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
         ListView listView = getListView();
         listView.setBackgroundResource(R.drawable.worldbackground);
         listView.setCacheColorHint(Color.TRANSPARENT);
-<<<<<<< HEAD
-    }
-
-    private Handler mHandler = new Handler() {
-        // 此方法在ui線程運行
-        public void handleMessage(Message msg) {
-            //what代表丟入的參數,之後switch判斷丟入的參數,case再進行動作,75行有參數
-            switch (msg.what) {
-                case show_msg:
-                    AlertDialog.Builder Dialog = new AlertDialog.Builder(OpenFire.this); // Dialog
-                    Dialog.setTitle(titleShow);
-                    Dialog.setMessage(message);
-                    Dialog.setIcon(android.R.drawable.ic_dialog_info);
-                    Dialog.setPositiveButton(bmsg, new DialogInterface.OnClickListener() { // 按下abort
-                        // 將thread結束
-                        // 隱藏progressbar
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    });
-                    Dialog.show();
-                    titleShow="";
-                    message="";
-                    bmsg="";
-                    onResume();
-                    break;
-                case upDate:
-
-                    pdialog.setMessage(upmsg);
-                    upmsg="";
-                    break;
-
-                case ok:
-                    // 傳送成功後顯示成功視窗
-                    AlertDialog.Builder Dialog1 = new AlertDialog.Builder(OpenFire.this); // Dialog
-                    Dialog1.setTitle("");
-                    Dialog1.setMessage("傳送成功");
-                    Dialog1.setIcon(android.R.drawable.ic_dialog_info);
-                    Dialog1.setNeutralButton("確定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    });
-                    Dialog1.show();
-                    break;
-
-                case timeOut:
-                    AlertDialog.Builder Dialog0 = new AlertDialog.Builder(OpenFire.this); // Dialog
-                    Dialog0.setTitle("連線逾時");
-                    Dialog0.setMessage("請問是否要重送?");
-                    Dialog0.setIcon(android.R.drawable.ic_dialog_info);
-                    Dialog0.setNeutralButton("確定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            new sendFile().execute();
-
-                        }
-                    });
-                    Dialog0.setNegativeButton("取消", new DialogInterface.OnClickListener() { // 按下abort
-                        // 將thread結束
-                        // 隱藏progressbar
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            FileContentProvider test = new FileContentProvider();
-                            test.del_table(Uri.parse("content://tab.list.d2d/file_choice"));
-                            previewImg.setVisibility(View.INVISIBLE);
-                            tvName.setVisibility(View.INVISIBLE);
-                            delete.setVisibility(View.INVISIBLE);
-                            etR.setText("");
-                            etT.setText("");
-                            etC.setText("");
-                        }
-                    });
-                    Dialog0.show();
-                    break;
-                case error:
-                    Dialog = new AlertDialog.Builder(OpenFire.this);
-                    Dialog.setTitle("");
-                    Dialog.setMessage("傳送失敗，查無此收件者");
-                    Dialog.setIcon(android.R.drawable.ic_dialog_info);
-                    Dialog.setNeutralButton("確定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            etR.setText("");
-
-                        }
-                    });
-                    Dialog.show();
-                    break;
-            }
-        }
-    };
-
-=======
         submit = new Submit();
     }
 
->>>>>>> origin/master
     private List<Map<String, Object>> getData() {
 
         getinfo = new ArrayList<openFireInfo>();
@@ -810,17 +703,6 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                             int id_this = Integer.parseInt(up_filepath.getString(0));
                             String where = UserSchema._ID + " = " + id_this;
                             getContentResolver().update(Uri.parse("content://tab.list.d2d/user_data"), values, where, null);
-<<<<<<< HEAD
-                        }
-                        up_filepath.close();
-
-                        values = new ContentValues();
-                        values.put(UserSchema._FILEPATH, getFilename);
-//                        values.put(UserSchema._FILENAME, retrieve.filename);
-//                        values.put(UserSchema._ID, where);
-                        getContentResolver().insert(Uri.parse("content://tab.list.d2d/file_choice"), values);
-
-=======
                             getContentResolver().insert(Uri.parse("content://tab.list.d2d/file_choice"), values);
 
                             values = new ContentValues();
@@ -832,7 +714,6 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                         }
                         up_filepath.close();
 
->>>>>>> origin/master
                         updateNotification("0","wlan");
                         onResume();
                     }
@@ -1460,25 +1341,11 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
         // 檢查使用者有沒有選擇要上傳的檔案,選擇好的檔案會寫入file_choice的table內
         file_path = new ArrayList<String>();
         Cursor up_file_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/file_choice"), form, null, null, null);
-<<<<<<< HEAD
-//        Cursor up_file_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), form, null, null, null);
-=======
->>>>>>> origin/master
         if (up_file_cursor.getCount() > 0) {
             System.out.println("Show up_file_cursor: " + up_file_cursor.getCount());
             dialog = ProgressDialog.show(OpenFire.this, "請稍候", "資料處理中", true);
             dialog.show();
             up_file_cursor.moveToFirst();
-<<<<<<< HEAD
-            file_path.add(up_file_cursor.getString(0));
-            selfId = randomString(20);
-            postFile = new String();
-            System.out.println("Show up_file_cursor detail: " + up_file_cursor.getCount() + " selfId: " + selfId);
-            for (index = 0; index < up_file_cursor.getCount(); index++) {
-                System.out.println("for loop entry, index: " + index);
-                boolean[] checktype = new boolean[AttachParameter.filetype];
-                checktype = AttachParameter.checktype(attachment);
-=======
             fileName = up_file_cursor.getString(0);
             attachFile = fileName.replace("&", "");
             attachPath = sdcardPath + attachFile;
@@ -1491,7 +1358,6 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                 System.out.println("for loop entry, index: " + index);
                 boolean[] checktype = new boolean[AttachParameter.filetype];
                 checktype = AttachParameter.checktype(attachPath);
->>>>>>> origin/master
                 System.out.println("for loop entry, checktype: " + checktype);
                 // 如果選擇的是影片，則計算他的影片長度、大小，目的是要傳給ffmpeg使用
                 if (checktype[AttachParameter.video]||checktype[AttachParameter.music]||checktype[AttachParameter.photo]) {
@@ -1499,32 +1365,6 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                     File file = new File(file_path.get(index));
                     // 開啟計算檔案長度並存入attachSize
                     file_size = (int) file.length();
-<<<<<<< HEAD
-                    file_name = file.getName();
-                    postFile = postFile + "&file_name" + index + "_0=" + file_name;
-                    duration = 0;
-                    file_amount = 1;
-
-                    System.out.println("file_size: " + file_size + " file_name: " + file_name + " postFile: " + postFile);
-
-                    //2016/06/30新增修改
-                    try {
-                        FileInputStream inputStream = new FileInputStream(new File(file_path.get(index)));
-                        byte[] data = new byte[1024];
-                        FileOutputStream outputStream =new FileOutputStream(new File(Environment.getExternalStorageDirectory().toString() + File.separator + "KM" + "/"+file_name));
-                        while (inputStream.read(data) != -1) {
-                            outputStream.write(data);
-                        }
-                        inputStream.close();
-                        outputStream.close();
-                    } catch (FileNotFoundException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }  catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-=======
                     fileName = file.getName();
                     file_name = fileName.replace("&", "");
                     postFile = postFile + "&file_name" + index + "_0=" + file_name;
@@ -1549,7 +1389,6 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
 //                        // TODO Auto-generated catch block
 //                        e.printStackTrace();
 //                    }
->>>>>>> origin/master
 
                     ContentValues values = new ContentValues();
                     values.put(UserSchema._FILEPATH, Environment.getExternalStorageDirectory().toString() + File.separator + "KM" + "/"+file_name);//2016/06/30新增修改
@@ -1605,16 +1444,6 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
 
                 /// ex : storage/emulated/0/DCIM/100ANDRO/MOV_0259.mp4
 //                File file = new File("/storage/emulated/0/KM/0R2emEfBL_lbe-_0.png");
-<<<<<<< HEAD
-                File file = new File(attachment);
-                String filename = file.getName();
-                filetype = filename.split("\\.");
-                Cursor check_finish_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/temp_file"), new String[] { UserSchema._FILEPATH }, "filecheck='0' and filerecord='file0_0' and selfid='" + selfId + "'", null, null);
-                if(check_finish_cursor.getCount()>0){
-                    check_finish_cursor.moveToFirst();
-                    file0_0=check_finish_cursor.getString(0);
-                    firstfile =new File(file0_0);
-=======
                 File file = new File(attachPath);
                 String filename = file.getName();
                 filetype = filename.split("\\.");
@@ -1625,7 +1454,6 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                     fileName = check_finish_cursor.getString(1);
                     filename = fileName.replace("&", "");
                     firstfile =new File(file0_0 + filename);
->>>>>>> origin/master
 
                     //2016/06/30新增
                     checktype = new boolean[AttachParameter.filetype];
@@ -1643,11 +1471,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                         "&selfid="+selfId+"&receiver=" + receiver +
                         "&filecnt=" + file_amount + "&duration=" + duration +
                         "&filename=" + filename + "&filetype=" + filetype[1] +
-<<<<<<< HEAD
-                        "&filepath=" + attachment + "&length=" + file_size +
-=======
                         "&filepath=" + attachPath + "&length=" + file_size +
->>>>>>> origin/master
                         "&firstlength=" + (int)firstfile.length()+"&urgent=" + urgent  + postFile);
 
                 String resp = submit.submit1(Login.latest_cookie);
@@ -2190,8 +2014,6 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
         return sb.toString();
     }
 
-<<<<<<< HEAD
-=======
     private Handler mHandler = new Handler() {
         // 此方法在ui線程運行
         public void handleMessage(Message msg) {
@@ -2284,5 +2106,4 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
         }
     };
 
->>>>>>> origin/master
 }

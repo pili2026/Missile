@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import mcs.LoginInput;
+import tab.list.AttachParameter;
 
 
 /**
@@ -24,7 +25,7 @@ public class RegFromServer {
         String regreturn = null;
         try {
 
-            String pathUrl = "http://" +  LoginInput.Homeip + "/wsgi/account/register/";
+            String pathUrl = "http://" +  AttachParameter.Homeip + "/wsgi/account/register/";
             HttpRequest request = HttpRequest.post(pathUrl);
             String response = request.connectTimeout(10000).send(requestString).body();
 
@@ -55,11 +56,11 @@ public class RegFromServer {
             // 設定mail主旨
             String subject = "welcome to kissmedia";
             // 設定mail內容
-            String message = "http://"+ LoginInput.Homeip+"/wsgi/account/validate/?" + validate[1];
+            String message = "http://"+ AttachParameter.Homeip+"/wsgi/account/validate/?" + validate[1];
             // 設定mail的收件者
             String to_email = validate[3];
             String requestString = "subject=" + subject + "&message=" + message + "&to_email=" + to_email;
-            String pathUrl = "http://"+ LoginInput.Homeip+":8000/cms/send_email/";
+            String pathUrl = "http://"+ AttachParameter.Homeip+":8000/cms/send_email/";
             HttpRequest request = HttpRequest.post(pathUrl);
             String response = request.send(requestString).body();
             if (request.ok()) {
@@ -82,7 +83,7 @@ public class RegFromServer {
         String regreturn = null;
         try {
 
-            String pathUrl = "http://" +  LoginInput.Homeip + "/wsgi/account/validate/";
+            String pathUrl = "http://" +  AttachParameter.Homeip + "/wsgi/account/validate/";
             String req="validate="+requestString+"&";
             HttpRequest request = HttpRequest.get(pathUrl);
             String response = request.connectTimeout(10000).send(req).body();

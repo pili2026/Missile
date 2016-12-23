@@ -42,7 +42,7 @@ public class EditAccount {
         try {
             response = false;
 
-            String pathUrl = "http://" + LoginInput.Homeip + "/wsgi/account/changepassword/";
+            String pathUrl = "http://" + AttachParameter.Homeip + "/wsgi/account/changepassword/";
             // 使用POST的方式建立連線
             HttpRequest request = HttpRequest.post(pathUrl);
             // 設定cookie、傳送request字串，內容為新密碼、新電話，並透過body取得response
@@ -63,7 +63,7 @@ public class EditAccount {
     public void editnotify(String method) {
         try {
             String req = "method=" + method;
-            String pathUrl1 = "http://" + LoginInput.Homeip + "/wsgi/account/setnotification/";
+            String pathUrl1 = "http://" + AttachParameter.Homeip + "/wsgi/account/setnotification/";
             HttpRequest request1 = HttpRequest.post(pathUrl1);
             String body = request1.header("cookie", Login.latest_cookie).send(req).body();
 
@@ -76,7 +76,7 @@ public class EditAccount {
     public String getnotify() {
         String body = new String();
         try {
-            String pathUrl1 = "http://" + LoginInput.Homeip + "/wsgi/account/getnotification/";
+            String pathUrl1 = "http://" + AttachParameter.Homeip + "/wsgi/account/getnotification/";
             HttpRequest request1 = HttpRequest.get(pathUrl1);
             body = request1.header("cookie", Login.latest_cookie).body();
             boolean result= AttachParameter.chechsuccess(body);

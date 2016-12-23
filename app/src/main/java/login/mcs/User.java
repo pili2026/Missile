@@ -4,6 +4,7 @@ import com.github.kevinsawicki.http.HttpRequest;
 
 import mcs.LoginActivity;
 import mcs.LoginInput;
+import tab.list.AttachParameter;
 
 
 /**
@@ -20,7 +21,7 @@ public class User {
     public String[] getuser() {
         String[] userdata = new String[4];
         try {
-            String pathUrl1 = "http://" + LoginInput.Homeip + "/wsgi/account/user/";
+            String pathUrl1 = "http://" + AttachParameter.Homeip + "/wsgi/account/user/";
             HttpRequest request1 = HttpRequest.get(pathUrl1);
 
             String response1 = request1.header("cookie", Login.latest_cookie).body();
@@ -36,7 +37,7 @@ public class User {
     public String setservicetime(String requestString) {
         String res = "";
         try {
-            String pathUrl1 = "http://" + LoginInput.Homeip + "/wsgi/cms/set_time/";
+            String pathUrl1 = "http://" + AttachParameter.Homeip + "/wsgi/cms/set_time/";
             HttpRequest request1 = HttpRequest.post(pathUrl1);
 
             res = request1.header("cookie", Login.latest_cookie).send(requestString).body();
@@ -51,7 +52,7 @@ public class User {
     public String check_password(String requestString) {
         String res = "";
         try {
-            String pathUrl1 = "http://" + LoginInput.Homeip + "/wsgi/cms/check_password/";
+            String pathUrl1 = "http://" + AttachParameter.Homeip + "/wsgi/cms/check_password/";
             HttpRequest request1 = HttpRequest.post(pathUrl1);
 
             res = request1.header("cookie", Login.latest_cookie).send(requestString).body();
@@ -67,7 +68,7 @@ public class User {
         String res = "";
         try {
             System.out.println(token);
-            String pathUrl1 = "http://" + LoginInput.Homeip + "/wsgi/cms/set_d2d/";
+            String pathUrl1 = "http://" + AttachParameter.Homeip + "/wsgi/cms/set_d2d/";
             HttpRequest request1 = HttpRequest.post(pathUrl1);
 
             res = request1.header("cookie", Login.latest_cookie).send("token="+token+"&urgent="+urgent).body();
@@ -85,7 +86,7 @@ public class User {
         String[]res = null ;
         try {
 
-            String pathUrl1 = "http://" + LoginInput.Homeip + "/wsgi/cms/get_time/?user="+user;
+            String pathUrl1 = "http://" + AttachParameter.Homeip + "/wsgi/cms/get_time/?user="+user;
             HttpRequest request1 = HttpRequest.get(pathUrl1);
 
             String resp = request1.header("cookie", Login.latest_cookie).body();
@@ -104,7 +105,7 @@ public class User {
         try {
             System.out.println(token);
             //2015/08/26 loginActivity改成Loginput
-            String pathUrl1 = "http://" + LoginActivity.Homeip + "/wsgi/cms/del_msg/";
+            String pathUrl1 = "http://" + AttachParameter.Homeip + "/wsgi/cms/del_msg/";
             HttpRequest request1 = HttpRequest.post(pathUrl1);
 
             res = request1.header("cookie", Login.latest_cookie).send("token="+token).body();

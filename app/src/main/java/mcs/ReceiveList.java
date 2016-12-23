@@ -578,10 +578,10 @@ public class ReceiveList extends ListActivity implements AdapterView.OnItemClick
 
                 updateState("download", "messagetoken='" + token + "'");
                 // 先做request的動作，傳入token去server，取得該token所持有的檔案id
-                upmsg="目前正在與"+ LoginInput.connect_ip+"連線中";
+                upmsg="目前正在與"+ AttachParameter.connect_ip+"連線中";
                 mHandler.obtainMessage(UPDATE).sendToTarget();
 
-                reretrieve = retrieve.retrieve_req_for_d2d(LoginInput.connect_ip, LoginInput.connect_port,getinfo.get(listid).gettoken());
+                reretrieve = retrieve.retrieve_req_for_d2d(AttachParameter.connect_ip, AttachParameter.connect_port,getinfo.get(listid).gettoken());
                 reretrieve_arg[0]=reretrieve[0];
                 reretrieve_arg[1]=reretrieve[1];
                 reretrieve_arg[2]=reretrieve[2];
@@ -621,7 +621,7 @@ public class ReceiveList extends ListActivity implements AdapterView.OnItemClick
 
                             String DLfilename=new String();
 
-                            upmsg="請勿任意移動位置，避免斷線，目前正在與"+ LoginInput.connect_ip+"連線中，並下載第"+(j+1)+"/"+retrieve.fileid.length;
+                            upmsg="請勿任意移動位置，避免斷線，目前正在與"+ AttachParameter.connect_ip+"連線中，並下載第"+(j+1)+"/"+retrieve.fileid.length;
                             mHandler.obtainMessage(UPDATE).sendToTarget();
                             //20160905學長加回(getContentResolver())
                             reretrieve_file =retrieve.saveBinaryFile_for_d2d(token, j,getContentResolver()); // 收取締n塊檔案
@@ -951,14 +951,14 @@ public class ReceiveList extends ListActivity implements AdapterView.OnItemClick
                 //檢查目標是否有內外網
                 if(AttachParameter.out_ip.equals(socketport[0])){
                     //外網ip相同，給內網ip
-                    LoginInput.connect_ip=socketport[1];
+                    AttachParameter.connect_ip=socketport[1];
                     System.out.println("這邊是 d2d socketport[1]="+socketport[1]);
                 }else{
                     //外網ip不同，給外網
-                    LoginInput.connect_ip=socketport[0];
+                    AttachParameter.connect_ip=socketport[0];
                     System.out.println("這邊是 d2d socketport[0]="+socketport[0]);
                 }
-                LoginInput.connect_port=socketport[2];
+                AttachParameter.connect_port=socketport[2];
                 updateNotification("3", "d2d");
 
                 retrieve.fileid = Again_id;
@@ -1671,17 +1671,17 @@ public class ReceiveList extends ListActivity implements AdapterView.OnItemClick
                 //檢查目標是否有內外網
                 if(AttachParameter.out_ip.equals(socketport[0])){
                     //外網ip相同，給內網ip
-                    LoginInput.connect_ip=socketport[1];
+                    AttachParameter.connect_ip=socketport[1];
                     System.out.println("這邊是 d2d socketport[1]="+socketport[1]);
                 }else{
                     //外網ip不同，給外網
-                    LoginInput.connect_ip=socketport[0];
+                    AttachParameter.connect_ip=socketport[0];
                     System.out.println("這邊是 d2d socketport[0]="+socketport[0]);
                 }
-                LoginInput.connect_port=socketport[2];
+                AttachParameter.connect_port=socketport[2];
                 Retrieve retrieve=new Retrieve();
                 System.out.println("這邊是 d2d socketport[0]="+socketport[0]);
-                resp=retrieve.check_file_for_m2m(LoginInput.connect_ip+":"+ LoginInput.connect_port, token);
+                resp=retrieve.check_file_for_m2m(AttachParameter.connect_ip+":"+ AttachParameter.connect_port, token);
 
             }else{
                 resp="server not ready";

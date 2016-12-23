@@ -28,7 +28,7 @@ public class Alive {
     public String[] alive(String cookie, String ip, int portnumber) {
         String[] aliveres = new String[5];
         try {
-            String requeststring= ip+"&port="+portnumber;
+            String requeststring = ip + "&port=" + portnumber;
 
             String pathUrl = "http://" + aliveIp + "/wsgi/loc/alive/";
             // 使用get的方法
@@ -47,16 +47,16 @@ public class Alive {
                 boolean[] checktype = new boolean[AttachParameter.msgtype];
                 checktype = AttachParameter.checkCR(aliveRes);
                 if(checktype[AttachParameter.content]){
-                    ip=aliveRes.substring(0, aliveRes.indexOf("&content"));
+                    ip = aliveRes.substring(0, aliveRes.indexOf("&content"));
                 }
                 else if(checktype[AttachParameter.reply]){
-                    ip=aliveRes.substring(0, aliveRes.indexOf("&reply"));
+                    ip = aliveRes.substring(0, aliveRes.indexOf("&reply"));
                 }
                 else if(checktype[AttachParameter.d2d]){
-                    ip=aliveRes.substring(0, aliveRes.indexOf("&d2d"));
+                    ip = aliveRes.substring(0, aliveRes.indexOf("&d2d"));
                 }
                 else{
-                    ip=aliveRes;
+                    ip = aliveRes;
                 }
                 // 如果找到近的Server IP和原本的aliveIp不一樣的話會被近的取代，而且會重新登入
                 if (!ip.equalsIgnoreCase(aliveIp)) {
@@ -84,7 +84,6 @@ public class Alive {
             aliveres[2] = "false";
             ex.printStackTrace();
         }
-
         return aliveres;
     }
 }

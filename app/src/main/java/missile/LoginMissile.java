@@ -393,6 +393,7 @@ public class LoginMissile extends AppCompatActivity implements View.OnClickListe
                     intent.putExtras(bundle);
                     intent.setClass(LoginMissile.this, MainFragment.class);
                     startActivity(intent);
+
                 }
                 break;
         }
@@ -590,9 +591,10 @@ public class LoginMissile extends AppCompatActivity implements View.OnClickListe
                     btnIn.setEnabled(true);
                     btnFrie.setEnabled(true);
                     btnEdit.setEnabled(true);
+
+                    btnReg.setBackgroundResource(R.drawable.record);
                     // 隱藏註冊紐
-                    //reg_bn.setBackgroundResource(R.drawable.dra_custom_btn);
-                    btnReg.setVisibility(View.INVISIBLE);
+//                    btnReg.setVisibility(View.INVISIBLE);
                     retrieving = false;
 
                     if (AttachParameter.priority == 0){
@@ -785,6 +787,7 @@ public class LoginMissile extends AppCompatActivity implements View.OnClickListe
                 messageProcess MsgSave = new messageProcess();
                 MsgSave.checkwlan(getContentResolver(), aliveIp[4]);
                 updateContent(Uri.parse("content://tab.list.d2d/user_data"), "retrievable","content is null");
+                updateContent(Uri.parse("content://tab.list.d2d/user_data"), "recieve", "content is null");
                 updateContent(Uri.parse("content://tab.list.d2d/user_reply"), "reply","filename is null");
                 MsgSave=null;
                 pdialog.dismiss();
@@ -847,7 +850,7 @@ public class LoginMissile extends AppCompatActivity implements View.OnClickListe
             // 抓取的欄位名稱：user_data資料表中ID值，條件：itemclick點擊時所得的token
             updateState("download", "messagetoken='" + token + "'");
             // 先做request的動作，傳入token去server，取得該token所持有的檔案id
-            reretrieve = retrieve.retrieve_req_for_d2d(LoginInput.connect_ip, LoginInput.connect_port,bdtoken);
+            reretrieve = retrieve.retrieve_req_for_d2d(AttachParameter.connect_ip, AttachParameter.connect_port,bdtoken);
             reretrieve_arg[0]=reretrieve[0];
             reretrieve_arg[1]=reretrieve[1];
             reretrieve_arg[2]=reretrieve[2];
@@ -859,7 +862,7 @@ public class LoginMissile extends AppCompatActivity implements View.OnClickListe
             if (reretrieve[0] == "true"){ // retrieve_req=ret=0
 
                 //========20160905加入===========//
-                notify_msg="正在接收來自於: "+ LoginInput.connect_ip+"的"+retrieve.fileid[i].substring(retrieve.fileid[i].indexOf("/KM/")+4,retrieve.fileid[i].length());
+                notify_msg="正在接收來自於: "+ AttachParameter.connect_ip+"的"+retrieve.fileid[i].substring(retrieve.fileid[i].indexOf("/KM/")+4,retrieve.fileid[i].length());
                 ss=10;
                 mHandler.obtainMessage(SHOW_NOTIFY).sendToTarget();
                 //========20160905加入===========//
@@ -1165,7 +1168,7 @@ public class LoginMissile extends AppCompatActivity implements View.OnClickListe
                     }
                     id_this = Integer.valueOf(up_content.getString(0));
                     ContentValues values = new ContentValues();
-                    if (mod.equals("retrievable")) {
+                    if (mod.equals("retrievable") || mod.equals("recieve")) {
                         tittle = reretrieve[1].substring(reretrieve[1].indexOf("subject=") + 8, reretrieve[1].indexOf("&content="));
                         values.put(UserSchema._CONTENT, content);
                         values.put(UserSchema._TITTLE, tittle);
@@ -1476,6 +1479,7 @@ public class LoginMissile extends AppCompatActivity implements View.OnClickListe
                         messageProcess MsgSave = new messageProcess();
                         MsgSave.checkwlan(getContentResolver(), aliveIp[4]);
                         updateContent(Uri.parse("content://tab.list.d2d/user_data"), "retrievable","content is null");
+                        updateContent(Uri.parse("content://tab.list.d2d/user_data"), "recieve", "content is null");
                         updateContent(Uri.parse("content://tab.list.d2d/user_reply"), "reply","filename is null");
                         MsgSave=null;
                         if( aliveIp[4].length()>20){
@@ -1612,14 +1616,14 @@ public class LoginMissile extends AppCompatActivity implements View.OnClickListe
                                         //檢查目標是否有內外網
                                         if(AttachParameter.out_ip.equals(socketport[0])){
                                             //外網ip相同，給內網ip
-                                            LoginInput.connect_ip=socketport[1];
+                                            AttachParameter.connect_ip=socketport[1];
                                             System.out.println("這邊是 d2d socketport[1]="+socketport[1]);
                                         }else{
                                             //外網ip不同，給外網
-                                            LoginInput.connect_ip=socketport[0];
+                                            AttachParameter.connect_ip=socketport[0];
                                             System.out.println("這邊是 d2d socketport[0]="+socketport[0]);
                                         }
-                                        LoginInput.connect_port=socketport[2];
+                                        AttachParameter.connect_port=socketport[2];
                                         updateNotification("3", "d2d",bdtoken);
                                         new startretrieve().execute();
 
@@ -1680,61 +1684,6 @@ public class LoginMissile extends AppCompatActivity implements View.OnClickListe
                     }
                     get_d2d_id.close();
 
-                    Cursor ch_id = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_reply"), check_up, "ready is null", null, null);
-                    //發現有還沒READY的資料，代表該筆還不能上傳，開始逐一檢查原因
-                    if(ch_id.getCount()>0){
-                        Log.i("LOGININPUT", "開始判斷");
-                        ch_id.moveToFirst();
-                        for(int i =0;i<ch_id.getCount();i++){
-                            self_id=ch_id.getString(4);
-                            Cursor get_id = getContentResolver().query(Uri.parse("content://tab.list.d2d/temp_content"), id_up, "selfid='"+self_id +"' and finish ='yes'", null, null);
-                            //檢查該檔案是否切割完畢
-                            if(get_id.getCount()>0){
-                                get_id.moveToFirst();
-                                token=get_id.getString(0);
-                                //對方收訊訊息要求檔案，但發現卻沒有token，代表token沒收到，重新發送要求取回token
-                                if(token.equals("")){
-                                    //執行republish，要求token,不能使用非同步
-                                }else{
-                                    //token存在，也切割完畢
-                                    Cursor file_token = getContentResolver().query(Uri.parse("content://tab.list.d2d/temp_file"), temp_up, "selfid='"+self_id +"' and messagetoken is null", null, null);
-                                    //檢查temp_file內的檔案是否也更新上token
-                                    if(file_token.getCount()>0){
-                                        //進行token更新
-                                        ContentValues values = new ContentValues();
-                                        file_token.moveToFirst();
-                                        values.put(UserSchema._MESSAGETOKEN, token);
-                                        for (int a = 0; a < file_token.getCount(); a++) {
-                                            int id_this = Integer.parseInt(file_token.getString(0));
-                                            file_where = UserSchema._ID + " = " + id_this;
-                                            getContentResolver().update(Uri.parse("content://tab.list.d2d/temp_file"), values, file_where, null);
-                                            file_token.moveToNext();
-                                        }
-
-                                    }else{
-                                        //temp_file內的token已經全部更新
-                                    }
-                                    file_token.close();
-                                    //更新reply的ready
-                                    ContentValues values = new ContentValues();
-                                    values.put(UserSchema._READY, "yes");
-                                    int id_this = Integer.parseInt(ch_id.getString(2));
-                                    file_where = UserSchema._ID + " = " + id_this;
-                                    getContentResolver().update(Uri.parse("content://tab.list.d2d/user_reply"), values, file_where, null);
-                                }
-
-                            }else{
-                                //檔案還沒切割好，等待背景自動切完
-                            }
-                            get_id.close();
-
-                            ch_id.moveToNext();
-                        }
-                        Log.i("LOGININPUT", "結束判斷");
-                    }else{
-                        //沒有發現ready為空的，代表reply的檢查過了
-                    }
-                    ch_id.close();
                 }
                 info=null;
                 CM=null;

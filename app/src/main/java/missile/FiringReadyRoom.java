@@ -153,7 +153,7 @@ public class FiringReadyRoom extends Fragment {
 
     public String tittle,message,bmsg,upmsg;
 
-    int index, listId, urgent = 0;
+    int index, urgent = 0;
     String file_name = "", postFile;
     private String thumbnails = "mnt/sdcard/DCIM/.thumbnails/";
     ArrayList<String> file_path;
@@ -172,9 +172,7 @@ public class FiringReadyRoom extends Fragment {
     public String sender;
 
     List<missileInfo> getInfo = new ArrayList<missileInfo>();
-    List<Missile_Info> getMissileInfo;
     List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-    List<MissileReceiveInfo>getReceiveInfo;
 
     public FiringReadyRoom() {
         FileContentProvider test = new FileContentProvider();
@@ -328,7 +326,6 @@ public class FiringReadyRoom extends Fragment {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long listId) {
 
-
                             Toast.makeText(getActivity().getApplicationContext(), "點擊", Toast.LENGTH_LONG).show();
                         }
                     };
@@ -336,7 +333,6 @@ public class FiringReadyRoom extends Fragment {
                     listView.setOnItemClickListener(onItemClickListener);
                     return v;
                 }
-
             };
 
         }
@@ -454,7 +450,6 @@ public class FiringReadyRoom extends Fragment {
     private List<Map<String, Object>> getStaticData() {
         getInfo.clear();
         missileInfo tempinfo = new missileInfo();
-
 
         // 因為是總統，所以直接撈預先設定的資料
         String[] missile = { UserSchema._ID, UserSchema._TITTLE, UserSchema._CONTENT,UserSchema._FILEPATH};
@@ -984,14 +979,13 @@ public class FiringReadyRoom extends Fragment {
         fileName = file.getName();
         filetype = fileName.split("\\.");
         //File names and paths for the magnified images
-        save_key_magnified_path = AttachParameter.sdcardPath + "cipher_"+fileName;//2016/07/26修改加入 key_magnified
-        save_cipher_magnified_path = AttachParameter.sdcardPath + "key_"+fileName;//cipher_magnified
+        save_cipher_magnified_path = AttachParameter.sdcardPath + "cipher_"+fileName;//2016/07/26修改加入 key_magnified
+        save_key_magnified_path = AttachParameter.sdcardPath + "key_"+fileName;//cipher_magnified
         image_decrypt_file= AttachParameter.sdcardPath + "reslut.png";
         key_magnified_file = new File(save_key_magnified_path);
         cipher_magnified_file = new File(save_cipher_magnified_path);
 
         bw_file = new File(AttachParameter.sdcardPath + "Black_White.png");
-        key_file = new File(AttachParameter.sdcardPath + "key.png");
         fileBitmap = BitmapFactory.decodeFile(in_file);
 
         if (!key_magnified_file.exists()){

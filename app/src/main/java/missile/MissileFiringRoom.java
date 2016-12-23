@@ -21,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -98,7 +99,6 @@ public class MissileFiringRoom extends Fragment{
     ProgressDialog dialog = null;
     public String token ,fileName;
     String[] form = { UserSchema._FILEPATH, UserSchema._DURATION, UserSchema._FILESIZE, UserSchema._FILENAME, UserSchema._ID };
-    boolean checkFileType = false ;
     Button delete;
     private ListView listView;
     private SimpleAdapter simpleAdapter;
@@ -246,32 +246,22 @@ public class MissileFiringRoom extends Fragment{
         }else{
             list.clear();
             //==============總司令與小兵======================
-            simpleAdapter = new SimpleAdapter(getActivity(), getInboxData(),
+            simpleAdapter = new SimpleAdapter(getActivity(), getData(),
                     R.layout.frieready_other, new String[]{"img","title","date","info", "Im_missile_num"},
                     new int[] {R.id.img,R.id.title,R.id.date,R.id.info,R.id.Im_missile_num}){
                 @Override
                 public View getView (int position, View convertView, ViewGroup parent) {
                     View v = super.getView(position, convertView, parent);
 
-                    Button btnDownload = (Button)v.findViewById(R.id.Bn_download);
-
-
-                    btnDownload.setOnClickListener(new View.OnClickListener() {
+                    AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
                         @Override
-                        public void onClick(View v) {
-                            int id = (int) listId;
-                            // contact的三項訊息:contact msg date
-                            Intent intent = new Intent();
-                            Bundle bundle = new Bundle();
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long listId) {
 
-                            bundle.putString("contact", getMissileInfo.get(id).getcontact());
-                            intent.putExtras(bundle);
-
-                            intent.setClass(getActivity(), OpenFire.class);
-                            startActivity(intent);
-
+                            Toast.makeText(getActivity().getApplicationContext(), "點擊", Toast.LENGTH_LONG).show();
                         }
-                    });
+                    };
+
+                    listView.setOnItemClickListener(onItemClickListener);
 
                     return v;
                 }
@@ -300,7 +290,7 @@ public class MissileFiringRoom extends Fragment{
         String[] Form = { UserSchema._TITTLE, UserSchema._CONTENT, UserSchema._FILEPATH, UserSchema._DATE, UserSchema._MESSAGETOKEN, UserSchema._FILECOUNT };
         missileInfo tempinfo = new missileInfo();
         // 使用寄件者去撈出 過去中已經讀過的簡訊以及未被刪除的資料,用 tittle跟userstatus去檢查
-        Cursor msg_cursor = getActivity().getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), Form, "msg='recevice'", null, null);
+        Cursor msg_cursor = getActivity().getContentResolver().query(Uri.parse("content://tab.list.d2d/missile_fire"), Form, "msg='recieve'", null, null);
         if (msg_cursor.getCount() > 0) {
             msg_cursor.moveToFirst();
             for (int i = 0; i < msg_cursor.getCount(); i++) {
@@ -441,55 +431,6 @@ public class MissileFiringRoom extends Fragment{
             list.add(map);
         }
 
-        return list;
-    }
-
-    private List<Map<String, Object>> getInboxData() {
-
-        int count = 0;
-        Missile_Info tempInboxInfo;
-        getMissileInfo = new ArrayList<Missile_Info>();
-        String[] form = { FileContentProvider.UserSchema._SENDER };
-        String[] form1 = { FileContentProvider.UserSchema._TITTLE, FileContentProvider.UserSchema._DATE, FileContentProvider.UserSchema._SENDER };
-
-        // 檢查是否有寄件人
-        Cursor sender_cursor = getActivity().getContentResolver().query(Uri.parse("content://tab.list.d2d/user_group"), form, null, null, null);
-        sender_cursor.moveToFirst();
-        // 至少有一位寄件人
-        if (sender_cursor.getCount() > 0) {
-            for (int sender = 0; sender < sender_cursor.getCount(); sender++) {
-                Cursor sender_data_cursor = getActivity().getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), form1, "sender='" + sender_cursor.getString(0) + "' and tittle!='null' and userstatus !='delete'", null, null);
-                // 寄件人是否至少有一筆是有讀過的訊息,一樣檢查tittle,
-                // 撈出過去已經讀過的簡訊中,顯示最後一封看過的資料,所以用moveToLast
-                if (sender_data_cursor.getCount() > 0) {
-                    sender_data_cursor.moveToLast();
-                    tempInboxInfo = new Missile_Info();
-                    tempInboxInfo.settittle(sender_data_cursor.getString(0));
-                    tempInboxInfo.setdate(sender_data_cursor.getString(1));
-                    tempInboxInfo.setcontact(sender_data_cursor.getString(2));
-                    getMissileInfo.add(tempInboxInfo);
-                    count++;
-                    tempInboxInfo = new Missile_Info();
-                }// if sender_data end
-                sender_data_cursor.close();
-                sender_data_cursor = null;
-                sender_cursor.moveToNext();
-            }// sender loop end
-        }//if sender_cursor end
-        sender_cursor.close();
-
-        Map<String, Object> map = new HashMap<String, Object>();
-        if (getMissileInfo.size() != 0) {
-            for (int i = 0; i <= count - 1; i++) {
-                map = new HashMap<String, Object>();
-                map.put("contacttitle", getMissileInfo.get(i).getcontact());
-                map.put("contactinfo", getMissileInfo.get(i).getmsg());
-
-                map.put("contactimg", R.drawable.head);
-                map.put("contactdate", getMissileInfo.get(i).getdate());
-                list.add(map);
-            }// for end
-        }//if end
         return list;
     }
 
@@ -848,8 +789,6 @@ public class MissileFiringRoom extends Fragment{
 
         }
     }
-
-
 
     private Handler mHandler = new Handler() {
 
