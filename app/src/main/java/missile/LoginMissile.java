@@ -102,6 +102,10 @@ public class LoginMissile extends AppCompatActivity implements View.OnClickListe
     private EditText et, et2;
     private CheckedTextView ct;
     private String getid, getpw, getip;
+<<<<<<< HEAD
+    private boolean LoginNPE = true;
+=======
+>>>>>>> origin/master
     private int loginSuccess = 0,ss=0;
     private static final int UPDATE_LIST_MES = 0,UPDATE_FFMPEG=1,FFMPEG=2,timeout=3,change_word=4,SHOW_NOTIFY=5;
     private boolean finishUpdateList = false;
@@ -113,6 +117,16 @@ public class LoginMissile extends AppCompatActivity implements View.OnClickListe
     public static String method;
     Boolean idle=true;
     String[] aliveIp;
+<<<<<<< HEAD
+    String notify_msg=new String();
+    private NotificationManager gNotMgr = null;
+    public String[] rep, req;
+    Button btnReady, btnReg, btnFrie, btnEdit, btnLogin, btnIn;
+    LocUpdate locup =new LocUpdate();
+    ProgressDialog pdialog = null,re_ffmpeg_dialog=null,Dialog_for_login = null;
+    int tolen,hasRead;
+    String content;
+=======
     String notify_msg = "";
     private NotificationManager gNotMgr = null;
     private ArrayList<String> file_path;
@@ -121,13 +135,18 @@ public class LoginMissile extends AppCompatActivity implements View.OnClickListe
     ProgressDialog pdialog = null,re_ffmpeg_dialog=null,Dialog_for_login = null;
     int token,hasRead;
     String content, duration;
+>>>>>>> origin/master
     Logout logout = new Logout();
     Thread aliveThread;
     Thread listThread;
     FileContentProvider KM_DB = new FileContentProvider();
     ContentResolver contentResolver;
     private static final Logger log = Logger.getLogger(LoginInput.class.getName());
+<<<<<<< HEAD
+    int i = 0;
+=======
     int i = 0, file_size;
+>>>>>>> origin/master
     List<String> fileList = new ArrayList<String>();
     String bdtoken =new String();
     String bdsender =new String();
@@ -135,10 +154,18 @@ public class LoginMissile extends AppCompatActivity implements View.OnClickListe
     String bdreretrieve = new String();
     AppCompatActivity appCompatActivity;
     private UPnPDeviceFinder mDevfinder  = null;
+<<<<<<< HEAD
+
+    TextView name;
+
+    private static final int REQUEST_READ_SMS = 1;
+    private static final int REQUEST_READ_EXTERNAL_STORAGE = 2;
+=======
     TextView name;
     private static final int REQUEST_READ_SMS = 1;
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 2;
     private static final String TAG = "LoginMissile";
+>>>>>>> origin/master
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -897,11 +924,17 @@ public class LoginMissile extends AppCompatActivity implements View.OnClickListe
                     } catch (IOException ex) {
                         reretrieve_arg[5]="server error";
                         reretrieve_arg[10]="true";
+<<<<<<< HEAD
+                    }catch(Exception ex){
+                        reretrieve_arg[5]="server error";
+                        reretrieve_arg[9]="true";
+=======
                         Log.v(TAG, "startretrieve IOException: " + ex.getMessage());
                     }catch(Exception ex){
                         reretrieve_arg[5]="server error";
                         reretrieve_arg[9]="true";
                         Log.v(TAG, "startretrieve Exception: " + ex.getMessage());
+>>>>>>> origin/master
                     }
 
                 }
@@ -947,6 +980,15 @@ public class LoginMissile extends AppCompatActivity implements View.OnClickListe
                         //filename=up_filepath.getString(3);
                         String where = UserSchema._ID + " = " + id_this;
                         getContentResolver().update(Uri.parse("content://tab.list.d2d/user_data"), values, where, null);
+<<<<<<< HEAD
+                    }
+                    up_filepath.close();
+
+                    values = new ContentValues();
+                    values.put(UserSchema._FILEPATH, getFilename);
+                    getContentResolver().insert(Uri.parse("content://tab.list.d2d/file_choice"), values);
+
+=======
 
                         values = new ContentValues();
                         values.put(UserSchema._FILEPATH, getFilename);
@@ -958,6 +1000,7 @@ public class LoginMissile extends AppCompatActivity implements View.OnClickListe
                     }
                     up_filepath.close();
 
+>>>>>>> origin/master
                     updateNotification("0", "wlan",bdtoken);
                     bdtoken="";
                     idle=true;
@@ -1319,7 +1362,11 @@ public class LoginMissile extends AppCompatActivity implements View.OnClickListe
                     break;
 
                 case UPDATE_FFMPEG:
+<<<<<<< HEAD
+                    if(hasRead<=tolen){
+=======
                     if(hasRead <= token){
+>>>>>>> origin/master
                         re_ffmpeg_dialog.setProgress(hasRead);
                     }else{
                         re_ffmpeg_dialog.dismiss();

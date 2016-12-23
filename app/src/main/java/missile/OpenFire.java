@@ -4,9 +4,9 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
-import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -54,10 +54,14 @@ import login.mcs.Login;
 import login.mcs.Retrieve;
 import login.mcs.Submit;
 import login.mcs.User;
+import mcs.LoginInput;
 import mcs.VideoView;
 import tab.list.AttachParameter;
 import tab.list.FileContentProvider;
 import tab.list.FileContentProvider.UserSchema;
+import tab.list.FileUtils;
+
+import static tab.list.AttachParameter.path;
 import static tab.list.AttachParameter.sdcardPath;
 
 /**
@@ -125,7 +129,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
     public boolean finishretrieve;
     public String[] Again_id;
     public String titleShow, message, bmsg, upmsg, state, postFile, selfId, token, file_name, attachFile,
-            check_pass, receiver, Again_token, Again_sender, sender, attachment, fileName, attachPath;
+            check_pass, receiver, Again_token, Again_sender, sender, attachment, fileName, fileId, attachPath;
     public String title = "Command", content = "Missile Fire", viewmod = "", res = null;
     public User user = new User();
     public ProgressDialog pdialog = null, dialog = null, sendDialog = null;
@@ -148,7 +152,6 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
     private final int show_msg = 0, upDate = 1, timeOut = 2, ok = 3, error = 4;
     private static final int ITEM1 = Menu.FIRST, ITEM2 = Menu.FIRST + 1, ITEM3 = Menu.FIRST + 2, ITEM4 = Menu.FIRST + 3, ITEM5 = Menu.FIRST + 4;
     private static final String TAG = "OpenFire";
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -326,15 +329,12 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
         Cursor data_cursor = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), itemForm, "notification = '0' and messagetoken='" + getinfo.get(listId).gettoken() + "' and receive_id ='' and file_id is not null", null, null);
         if (data_cursor.getCount() > 0) {
             data_cursor.moveToFirst();
-            String chd2d = data_cursor.getString(3);
-            String chFile = data_cursor.getString(2);
-            attachFile = chFile.replace("&","");
+            String chd2d=data_cursor.getString(3);
             if(chd2d.equalsIgnoreCase("d2d")){
-                Log.v(TAG, "Check State: " + chd2d);
                 viewmod ="preview";
-                viewfile(sdcardPath + attachFile);
+                viewfile(sdcardPath + data_cursor.getString(2));
             }else{
-                viewfile(sdcardPath + attachFile);
+                viewfile(sdcardPath + data_cursor.getString(2));
 
 
             }
@@ -382,12 +382,14 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
                                 Toast.makeText(getApplicationContext(), "目前尚有檔案下載中，稍後再試", Toast.LENGTH_LONG).show();
 
                             } else {
+
                                 Log.i("token=", getinfo.get(listId).gettoken());
                                 // 設定token，目的是告知待會的retrive時要抓哪個檔案
 
                                 // 執行自訂的非同步函式
                                 viewmod = "preview";
                                 new startretrieve().execute();
+
                             }
                             CH_state.close();
 
@@ -1560,7 +1562,7 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
     }
 
     private class decrypt extends AsyncTask<Void, Void, String> {
-        String source = null,fileName = null;
+        String source = null,filename = null;
         String[] two_source;
         Bitmap source1,source2,final_image;
         OutputStream f = null;
@@ -1574,23 +1576,27 @@ public class OpenFire extends ListActivity implements AdapterView.OnItemClickLis
         @Override
         protected String doInBackground(Void... arg0) {
             String res = null;
+            //Cursor get_source = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), new String[]{UserSchema._FILEPATH,UserSchema._FILENAME}, "messagetoken='" + gettoken + "'", null, null);
+
             Cursor get_source = getContentResolver().query(Uri.parse("content://tab.list.d2d/user_data"), new String[]{UserSchema._FILEPATH, UserSchema._FILENAME}, "messagetoken='" + gettoken + "'", null, null);
-            int count = get_source.getCount();
+            int count=get_source.getCount();
             if(count>0){
                 get_source.moveToFirst();
-                source = get_source.getString(0);
-                fileName = source.replace("&", "");
+                source=get_source.getString(0);
+                filename = get_source.getString(1);
                 //做兩次token名稱的篩選(篩選"_"),如果檔名是由token + "_"組成的話
             }
             get_source.close();
 
             //拿source做字串處理(indexOf)
-//            source1 = BitmapFactory.decodeFile(sdcardPath + two_source[1]);
-//            source2 = BitmapFactory.decodeFile(sdcardPath + two_source[2]);
-            source1 = BitmapFactory.decodeFile(sdcardPath + fileName);
-            source2 = BitmapFactory.decodeFile(sdcardPath + "cipher_square.png");
-            AttachParameter.image_decrypt_file = sdcardPath + UserSchema._FILENAME + "_reslut.png";
+            Cursor sourceGet = getContentResolver().query(Uri.parse("content://tab.list.d2d/missile_fire"), new String[]{UserSchema._FILE_1, UserSchema._FILE_2}, "file_1'" + source + "'", null, null);
 
+            AttachParameter.image_decrypt_file = sdcardPath + UserSchema._FILENAME + "_reslut.png";
+            two_source=source.split("&");
+            source1 = BitmapFactory.decodeFile(sdcardPath + two_source[1]);
+            source2 = BitmapFactory.decodeFile(sdcardPath + two_source[2]);
+//            source1 = BitmapFactory.decodeFile(AttachParameter.sdcardPath+"file_name0_0-lbe.png");
+//            source2 = BitmapFactory.decodeFile(AttachParameter.sdcardPath+"file_name0_1-lbe.png");
             //解碼
             final_image = Bitmap.createBitmap(source1.getWidth(),source1.getHeight(), Bitmap.Config.ARGB_4444);
             for (int i = 0; i < source1.getHeight(); i += 2) {
