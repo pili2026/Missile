@@ -1,4 +1,4 @@
-# Missile
+# D2D-file-transfer
 Main function:
 
 1.Provide multimedia delivery(Video、Music、Photo)
