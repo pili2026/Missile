@@ -11,5 +11,5 @@ Main function:
 
 5.In the process of transferring photos, the use of visual cryptography
 
-***Missile name is intended for use in image cipher encrypted transmission, but the initial prototype is used for multimedia transmission.***
+***The original name of the project is a missile.Missile name is intended for use in image cipher encrypted transmission, but the initial prototype is used for multimedia transmission.***
 ***So with the "Missile" or "military" and so there is not much relevance***
